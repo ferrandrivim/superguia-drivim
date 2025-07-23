@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guía Interactiva de IA para Drivim</title>
+    <title>Superguía Interactiva de IA para Drivim</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,7 +16,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #d6d6d6; /* Slightly darker background for better contrast */
+            background-color: #EFEFEF; /* Slightly darker background for better contrast */
             color: #333333; /* Dark Charcoal */
         }
         .nav-link {
@@ -24,7 +24,7 @@
             border-bottom: 2px solid transparent;
         }
         .nav-link:hover, .nav-link.active {
-            color: #422680; /* Drivim Secondary Color */
+            color: ##422680; /* Drivim Secondary Color for nav links */
             border-bottom-color: #00cade;
         }
         .card {
@@ -159,6 +159,11 @@
             border-color: #00cade; /* Drivim Secondary Color on focus */
             box-shadow: 0 0 0 3px rgba(0, 202, 222, 0.2); /* Subtle focus ring */
         }
+
+        /* Style for the prompt result container border */
+        #prompt-resultado-container {
+            border: 1px solid #d0d0d0; /* Subtle border */
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -171,13 +176,15 @@
                 </div>
                 <div class="hidden md:block">
                     <div id="nav-menu" class="ml-10 flex items-baseline space-x-4">
+                        <a href="#conceptos" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Conceptos Clave</a>
                         <a href="#principios" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Principios Clave</a>
-                        <a href="#taller" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Taller de Prompts</a>
-                        <a href="#tecnicas" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Técnicas Pro</a>
-                        <a href="#casos" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Casos de Uso</a>
                         <a href="#responsable" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Uso Responsable</a>
+                        <a href="#taller" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Taller de Prompts</a>
+                        <a href="#casos" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Casos de Uso</a>
+                        <a href="#tecnicas" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Técnicas Pro</a>
                         <a href="#glosario" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Glosario</a>
                         <a href="#qa" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Preguntas Frecuentes</a>
+                        <a href="#ask-ai" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Pregúntale a la IA</a>
                     </div>
                 </div>
             </div>
@@ -189,6 +196,48 @@
         <section id="inicio" class="text-center py-16">
             <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900">Domina la Interacción con <span class="text-[#422680]">Inteligencia</span> <span class="text-[#00cade]">Artificial</span></h1>
             <p class="mt-6 max-w-3xl mx-auto text-lg text-gray-600">Bienvenido a la Superguía Interactiva de Drivim. Esta herramienta está diseñada para convertirte en un experto en el uso de la IA, optimizando tus conversaciones para obtener los mejores resultados de forma eficiente y responsable.</p>
+        </section>
+
+        <section id="conceptos" class="py-16 bg-gray-50 rounded-xl">
+            <div class="text-center">
+                <h2 class="section-title">Conceptos Clave</h2>
+                <p class="section-subtitle">
+                    Adéntrate en el mundo de la IA con estas definiciones esenciales.
+                    Comprender los fundamentos te ayudará a interactuar de forma más efectiva y a desbloquear todo su potencial.
+                </p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="card p-6 flex flex-col items-center text-center">
+                    <div class="text-5xl mb-4">🧠</div>
+                    <h3 class="text-xl font-bold mb-2">Inteligencia Artificial (IA)</h3>
+                    <p class="text-gray-600">Sistemas que imitan la inteligencia humana para realizar tareas como aprender, razonar y resolver problemas. En Drivim, es tu asistente inteligente.</p>
+                </div>
+                <div class="card p-6 flex flex-col items-center text-center">
+                    <div class="text-5xl mb-4">💬</div>
+                    <h3 class="text-xl font-bold mb-2">Chatbot</h3>
+                    <p class="text-gray-600">Un programa de IA diseñado para simular conversaciones humanas. Útil para atención al cliente, consultas rápidas y soporte interno.</p>
+                </div>
+                <div class="card p-6 flex flex-col items-center text-center">
+                    <div class="text-5xl mb-4">📝</div>
+                    <h3 class="text-xl font-bold mb-2">Prompt</h3>
+                    <p class="text-gray-600">La instrucción o pregunta que le das a una IA para obtener una respuesta. Es la clave para guiar a la IA hacia el resultado deseado.</p>
+                </div>
+                <div class="card p-6 flex flex-col items-center text-center">
+                    <div class="text-5xl mb-4">🤖</div>
+                    <h3 class="text-xl font-bold mb-2">Agente de IA</h3>
+                    <p class="text-gray-600">Una IA que puede tomar decisiones y realizar acciones de forma autónoma para lograr un objetivo, interactuando con su entorno.</p>
+                </div>
+                <div class="card p-6 flex flex-col items-center text-center">
+                    <div class="text-5xl mb-4">⚙️</div>
+                    <h3 class="text-xl font-bold mb-2">Automatización con IA</h3>
+                    <p class="text-gray-600">El uso de la IA para realizar tareas repetitivas o complejas sin intervención humana directa, mejorando la eficiencia y reduciendo errores.</p>
+                </div>
+                <div class="card p-6 flex flex-col items-center text-center">
+                    <div class="text-5xl mb-4">💱</div>
+                    <h3 class="text-xl font-bold mb-2">Token</h3>
+                    <p class="text-gray-600">La unidad básica de texto que una IA procesa. Las palabras, partes de palabras o signos de puntuación se convierten en tokens.</p>
+                </div>
+            </div>
         </section>
 
         <section id="principios" class="py-16">
@@ -266,6 +315,102 @@
             </div>
         </section>
 
+        <section id="responsable" class="py-16">
+            <div class="text-center">
+                <h2 class="section-title">Uso Responsable</h2>
+                <p class="section-subtitle">
+                    La IA es una herramienta poderosa que, usada con ética y conciencia, puede transformar Drivim.
+                    Descubre cómo maximizar su potencial mientras garantizas la seguridad, la equidad y la confianza en cada interacción.
+                </p>
+            </div>
+            <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="flex items-start space-x-4 p-4 flex-col">
+                    <div class="flex-shrink-0 h-12 w-12 rounded-full bg-red-100 flex items-center justify-center text-2xl mb-2">🛡️</div>
+                    <div>
+                        <h3 class="text-lg font-semibold">Verifica Siempre la Información</h3>
+                        <p class="text-gray-600 mb-4">La IA, aunque potente, no es infalible. Puede generar información incorrecta o "alucinaciones". Es crucial que todo dato crítico, cifra o afirmación generada por la IA sea <strong class="text-[#422680]">verificado y contrastado con fuentes fiables</strong> antes de su uso. Tu juicio experto es insustituible. No confíes ciegamente; cuestiona y valida.</p>
+                    </div>
+                    <button class="btn-secondary font-bold py-2 px-4 rounded-md mt-auto w-full expand-ethical-btn" data-principle="Verifica Siempre la Información">
+                        ✨ Obtener Consejos Prácticos
+                    </button>
+                    <div class="expanded-ethical-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap hidden w-full">
+                        <div class="spinner mx-auto hidden"></div>
+                        <span class="content-text"></span>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4 p-4 flex-col">
+                    <div class="flex-shrink-0 h-12 w-12 rounded-full bg-yellow-100 flex items-center justify-center text-2xl mb-2">🔒</div>
+                    <div>
+                        <h3 class="text-lg font-semibold">Protege la Privacidad</h3>
+                        <p class="text-gray-600 mb-4">La seguridad de los datos es primordial. <strong class="text-[#422680]">Nunca introduzcas información sensible, confidencial o personal</strong> de clientes, empleados o de la empresa (como datos financieros, estratégicos, DNI, direcciones, etc.) en modelos de IA públicos o no autorizados. Asegúrate de que cualquier plataforma de IA utilizada cumpla estrictamente con las políticas de protección de datos de Drivim y la legislación vigente (ej. GDPR).</p>
+                    </div>
+                    <button class="btn-secondary font-bold py-2 px-4 rounded-md mt-auto w-full expand-ethical-btn" data-principle="Protege la Privacidad">
+                        ✨ Obtener Consejos Prácticos
+                    </button>
+                    <div class="expanded-ethical-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap hidden w-full">
+                        <div class="spinner mx-auto hidden"></div>
+                        <span class="content-text"></span>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4 p-4 flex-col">
+                    <div class="flex-shrink-0 h-12 w-12 rounded-full bg-green-100 flex items-center justify-center text-2xl mb-2">⚖️</div>
+                    <div>
+                        <h3 class="text-lg font-semibold">Sé Consciente de los Sesgos</h3>
+                        <p class="text-gray-600 mb-4">La IA aprende de los datos con los que es entrenada, y estos datos pueden contener sesgos sociales, culturales o históricos. Esto puede llevar a que la IA reproduzca o incluso amplifique prejuicios. <strong class="text-[#422680]">Revisa críticamente los resultados de la IA</strong> para asegurar que sean justos, equitativos y no discriminatorios. Busca la diversidad de perspectivas al evaluar sus outputs, especialmente en temas sensibles como contratación, marketing o atención al cliente.</p>
+                    </div>
+                    <button class="btn-secondary font-bold py-2 px-4 rounded-md mt-auto w-full expand-ethical-btn" data-principle="Sé Consciente de los Sesgos">
+                        ✨ Obtener Consejos Prácticos
+                    </button>
+                    <div class="expanded-ethical-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap hidden w-full">
+                        <div class="spinner mx-auto hidden"></div>
+                        <span class="content-text"></span>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4 p-4 flex-col">
+                    <div class="flex-shrink-0 h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center text-2xl mb-2">🙋</div>
+                    <div>
+                        <h3 class="text-lg font-semibold">Supervisión Humana</h3>
+                        <p class="text-gray-600 mb-4">La IA es una herramienta de apoyo, no un sustituto de la inteligencia humana. Tu juicio, experiencia y supervisión son <strong class="text-[#422680]">esenciales para garantizar la calidad, el tono y la adecuación cultural</strong> de cualquier contenido o decisión asistida por IA. Mantén siempre un control final sobre los resultados y asegúrate de que se alineen con los valores y objetivos de Drivim. La responsabilidad última siempre recae en el ser humano.</p>
+                    </div>
+                    <button class="btn-secondary font-bold py-2 px-4 rounded-md mt-auto w-full expand-ethical-btn" data-principle="Supervisión Humana">
+                        ✨ Obtener Consejos Prácticos
+                    </button>
+                    <div class="expanded-ethical-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap hidden w-full">
+                        <div class="spinner mx-auto hidden"></div>
+                        <span class="content-text"></span>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4 p-4 flex-col">
+                    <div class="flex-shrink-0 h-12 w-12 rounded-full bg-orange-100 flex items-center justify-center text-2xl mb-2">©️</div>
+                    <div>
+                        <h3 class="text-lg font-semibold">Propiedad Intelectual y Contenido Generado</h3>
+                        <p class="text-gray-600 mb-4">Sé consciente de que el contenido generado por IA podría tener implicaciones de derechos de autor o propiedad intelectual. <strong class="text-[#422680]">No asumas que eres el propietario exclusivo de todo el contenido generado</strong>, especialmente si se basa en datos de entrenamiento extensos. Revisa las políticas de uso de cada herramienta de IA y asegúrate de que el contenido sea original y no infrinja derechos de terceros antes de su publicación o uso comercial.</p>
+                    </div>
+                    <button class="btn-secondary font-bold py-2 px-4 rounded-md mt-auto w-full expand-ethical-btn" data-principle="Propiedad Intelectual y Contenido Generado">
+                        ✨ Obtener Consejos Prácticos
+                    </button>
+                    <div class="expanded-ethical-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap hidden w-full">
+                        <div class="spinner mx-auto hidden"></div>
+                        <span class="content-text"></span>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4 p-4 flex-col">
+                    <div class="flex-shrink-0 h-12 w-12 rounded-full bg-gray-100 flex items-center justify-center text-2xl mb-2">🧑‍💻</div>
+                    <div>
+                        <h3 class="text-lg font-semibold">Impacto en el Empleo y Desarrollo Profesional</h3>
+                        <p class="text-gray-600 mb-4">La IA transformará roles, no los eliminará por completo. En Drivim, <strong class="text-[#422680]">fomentamos la adaptación y el aprendizaje continuo</strong> para trabajar *con* la IA, no *contra* ella. Utiliza la IA para automatizar tareas repetitivas y liberar tiempo para actividades de mayor valor que requieran creatividad, pensamiento crítico y empatía humana. Considera cómo la IA puede potenciar tus habilidades y abrir nuevas oportunidades profesionales.</p>
+                    </div>
+                    <button class="btn-secondary font-bold py-2 px-4 rounded-md mt-auto w-full expand-ethical-btn" data-principle="Impacto en el Empleo y Desarrollo Profesional">
+                        ✨ Obtener Consejos Prácticos
+                    </button>
+                    <div class="expanded-ethical-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap hidden w-full">
+                        <div class="spinner mx-auto hidden"></div>
+                        <span class="content-text"></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section id="taller" class="py-16 bg-gray-50 rounded-xl">
             <div class="text-center">
                 <h2 class="section-title">Taller de Prompts</h2>
@@ -321,6 +466,22 @@
             </div>
         </section>
 
+        <section id="casos" class="py-16 bg-gray-50 rounded-xl">
+            <div class="text-center">
+                <h2 class="section-title">Casos de Uso en Drivim</h2>
+                <p class="section-subtitle">Descubre cómo aplicar la IA en tu día a día. Filtra por departamento para encontrar ejemplos y plantillas de prompts relevantes para tu rol.</p>
+            </div>
+            <div class="flex justify-center space-x-2 md:space-x-4 mb-8 flex-wrap">
+                <button class="filter-btn active px-4 py-2 rounded-full font-semibold bg-white shadow-sm mb-2" data-filter="all">Todos</button>
+                <button class="filter-btn px-4 py-2 rounded-full font-semibold bg-white shadow-sm mb-2" data-filter="marketing">📣 Marketing</button>
+                <button class="filter-btn px-4 py-2 rounded-full font-semibold bg-white shadow-sm mb-2" data-filter="ventas">🤝 Ventas</button>
+                <button class="filter-btn px-4 py-2 rounded-full font-semibold bg-white shadow-sm mb-2" data-filter="operaciones">⚙️ Operaciones</button>
+                <button class="filter-btn px-4 py-2 rounded-full font-semibold bg-white shadow-sm mb-2" data-filter="rrhh">🧑‍🤝‍🧑 RRHH</button>
+            </div>
+            <div id="use-cases-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            </div>
+        </section>
+
         <section id="tecnicas" class="py-16">
             <div class="text-center">
                 <h2 class="section-title">Técnicas Pro</h2>
@@ -352,85 +513,24 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <section id="casos" class="py-16 bg-gray-50 rounded-xl">
-            <div class="text-center">
-                <h2 class="section-title">Casos de Uso en Drivim</h2>
-                <p class="section-subtitle">Descubre cómo aplicar la IA en tu día a día. Filtra por departamento para encontrar ejemplos y plantillas de prompts relevantes para tu rol.</p>
-            </div>
-            <div class="flex justify-center space-x-2 md:space-x-4 mb-8 flex-wrap">
-                <button class="filter-btn active px-4 py-2 rounded-full font-semibold bg-white shadow-sm mb-2" data-filter="all">Todos</button>
-                <button class="filter-btn px-4 py-2 rounded-full font-semibold bg-white shadow-sm mb-2" data-filter="marketing">📣 Marketing</button>
-                <button class="filter-btn px-4 py-2 rounded-full font-semibold bg-white shadow-sm mb-2" data-filter="ventas">🤝 Ventas</button>
-                <button class="filter-btn px-4 py-2 rounded-full font-semibold bg-white shadow-sm mb-2" data-filter="operaciones">⚙️ Operaciones</button>
-                <button class="filter-btn px-4 py-2 rounded-full font-semibold bg-white shadow-sm mb-2" data-filter="rrhh">🧑‍🤝‍🧑 RRHH</button>
-            </div>
-            <div id="use-cases-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            </div>
-        </section>
-
-        <section id="responsable" class="py-16">
-            <div class="text-center">
-                <h2 class="section-title">Uso Responsable</h2>
-                <p class="section-subtitle">Una gran poder conlleva una gran responsabilidad. Usa la IA de forma ética y segura siguiendo estas directrices clave.</p>
-            </div>
-            <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="flex items-start space-x-4 p-4 flex-col">
-                    <div class="flex-shrink-0 h-12 w-12 rounded-full bg-red-100 flex items-center justify-center text-2xl mb-2">🛡️</div>
-                    <div>
-                        <h3 class="text-lg font-semibold">Verifica Siempre la Información</h3>
-                        <p class="text-gray-600 mb-4">La IA puede "alucinar" o equivocarse. Nunca confíes ciegamente en sus datos. Contrasta la información crítica.</p>
-                    </div>
-                    <button class="btn-secondary font-bold py-2 px-4 rounded-md mt-auto w-full expand-ethical-btn" data-principle="Verifica Siempre la Información">
-                        ✨ Obtener Consejos Prácticos
-                    </button>
-                    <div class="expanded-ethical-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap hidden w-full">
-                        <div class="spinner mx-auto hidden"></div>
-                        <span class="content-text"></span>
+                <div class="card p-8">
+                    <h3 class="text-2xl font-bold mb-4">Cadena de Pensamiento (Chain of Thought)</h3>
+                    <p class="text-gray-600 mb-4">Instruye a la IA para que "piense en voz alta" o muestre sus pasos intermedios antes de dar la respuesta final. Esto mejora la precisión en tareas complejas y te permite depurar su razonamiento.</p>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-green-50 rounded-lg">
+                            <p class="font-semibold">Prompt Ejemplo:</p>
+                            <p class="text-sm text-gray-700">"Piensa paso a paso. Dada la siguiente información del cliente [datos], ¿cuál es el modelo de vehículo más adecuado y por qué?"</p>
+                        </div>
                     </div>
                 </div>
-                <div class="flex items-start space-x-4 p-4 flex-col">
-                    <div class="flex-shrink-0 h-12 w-12 rounded-full bg-yellow-100 flex items-center justify-center text-2xl mb-2">🔒</div>
-                    <div>
-                        <h3 class="text-lg font-semibold">Protege la Privacidad</h3>
-                        <p class="text-gray-600 mb-4">Nunca introduzcas datos sensibles o confidenciales de clientes o de la empresa.</p>
-                    </div>
-                    <button class="btn-secondary font-bold py-2 px-4 rounded-md mt-auto w-full expand-ethical-btn" data-principle="Protege la Privacidad">
-                        ✨ Obtener Consejos Prácticos
-                    </button>
-                    <div class="expanded-ethical-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap hidden w-full">
-                        <div class="spinner mx-auto hidden"></div>
-                        <span class="content-text"></span>
-                    </div>
-                </div>
-                <div class="flex items-start space-x-4 p-4 flex-col">
-                    <div class="flex-shrink-0 h-12 w-12 rounded-full bg-green-100 flex items-center justify-center text-2xl mb-2">⚖️</div>
-                    <div>
-                        <h3 class="text-lg font-semibold">Sé Consciente de los Sesgos</h3>
-                        <p class="text-gray-600 mb-4">La IA puede reflejar sesgos existentes en los datos. Revisa los resultados para asegurar que sean justos y equitativos.</p>
-                    </div>
-                    <button class="btn-secondary font-bold py-2 px-4 rounded-md mt-auto w-full expand-ethical-btn" data-principle="Sé Consciente de los Sesgos">
-                        ✨ Obtener Consejos Prácticos
-                    </button>
-                    <div class="expanded-ethical-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap hidden w-full">
-                        <div class="spinner mx-auto hidden"></div>
-                        <span class="content-text"></span>
-                    </div>
-                </div>
-                <div class="flex items-start space-x-4 p-4 flex-col">
-                    <div class="flex-shrink-0 h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center text-2xl mb-2">🙋</div>
-                    <div>
-                        <h3 class="text-lg font-semibold">Supervisión Humana</h3>
-                        <p class="text-gray-600 mb-4">La IA es un asistente, no un reemplazo. Tu juicio y supervisión son esenciales para garantizar la calidad.</p>
-                    </div>
-                    <button class="btn-secondary font-bold py-2 px-4 rounded-md mt-auto w-full expand-ethical-btn" data-principle="Supervisión Humana">
-                        ✨ Obtener Consejos Prácticos
-                    </button>
-                    <div class="expanded-ethical-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap hidden w-full">
-                        <div class="spinner mx-auto hidden"></div>
-                        <span class="content-text"></span>
+                <div class="card p-8">
+                    <h3 class="text-2xl font-bold mb-4">Few-Shot Prompting</h3>
+                    <p class="text-gray-600 mb-4">Proporciona a la IA unos pocos ejemplos de la tarea que quieres que realice antes de pedirle que la complete. Esto le ayuda a entender el formato y el estilo deseado, mejorando la calidad de la respuesta.</p>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-yellow-50 rounded-lg">
+                            <p class="font-semibold">Prompt Ejemplo:</p>
+                            <p class="text-sm text-gray-700">"Aquí tienes ejemplos de resúmenes de reuniones: [Ejemplo 1], [Ejemplo 2]. Ahora, resume la siguiente transcripción: [Transcripción]."</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -466,6 +566,30 @@
                     <h3 class="text-xl font-bold mb-2 text-gray-800">Deep Research con IA</h3>
                     <p class="text-gray-600">Técnica avanzada que implica usar la IA para investigar en profundidad, comenzando con una pregunta general y luego profundizando con preguntas cada vez más específicas para obtener conocimiento experto.</p>
                 </div>
+                <div class="card p-6">
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">Modelo de Lenguaje Grande (LLM)</h3>
+                    <p class="text-gray-600">Un tipo de programa de IA entrenado con vastas cantidades de texto para entender, generar y responder a lenguaje humano. Gemini es un ejemplo de LLM.</p>
+                </div>
+                <div class="card p-6">
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">Fine-tuning (Ajuste Fino)</h3>
+                    <p class="text-gray-600">Proceso de tomar un modelo de IA pre-entrenado (como un LLM) y entrenarlo adicionalmente con un conjunto de datos más pequeño y específico para una tarea o dominio particular, como el vocabulario y estilo de Drivim.</p>
+                </div>
+                <div class="card p-6">
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">Tokenización</h3>
+                    <p class="text-gray-600">El proceso de dividir una cadena de texto en unidades más pequeñas llamadas "tokens". Estos tokens son la entrada que los modelos de lenguaje procesan.</p>
+                </div>
+                <div class="card p-6">
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">Agente de IA</h3>
+                    <p class="text-gray-600">Un sistema de IA diseñado para percibir su entorno, tomar decisiones y ejecutar acciones de forma autónoma para lograr objetivos específicos.</p>
+                </div>
+                <div class="card p-6">
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">Automatización Inteligente</h3>
+                    <p class="text-gray-600">La combinación de la IA con la automatización de procesos para realizar tareas de manera más eficiente, adaptativa y con capacidad de aprendizaje.</p>
+                </div>
+                <div class="card p-6">
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">Chatbot</h3>
+                    <p class="text-gray-600">Programa informático que simula y procesa conversaciones humanas (escritas o habladas), permitiendo a los usuarios interactuar con dispositivos digitales como si hablaran con una persona real.</p>
+                </div>
             </div>
         </section>
 
@@ -476,9 +600,39 @@
             </div>
             <div class="max-w-3xl mx-auto space-y-4">
                 <details>
-                    <summary>¿Qué es la IA para Drivim y cuál es su objetivo principal?</summary>
+                    <summary>¿Qué es la Inteligencia Artificial (IA)?</summary>
                     <div class="details-content">
-                        <p>Para Drivim, la Inteligencia Artificial es una herramienta estratégica diseñada para revolucionar los procesos internos, aumentar la eficiencia y alcanzar nuevas metas de éxito. Su objetivo principal es actuar como un asistente capaz de automatizar tareas repetitivas (como redacción de correos o resúmenes), generar ideas y contenido (propuestas de marketing, borradores de documentos), investigar y sintetizar información, y optimizar la toma de decisiones mediante análisis de tendencias. La IA no es una solución mágica, sino un colega extremadamente rápido que requiere instrucciones claras y precisas.</p>
+                        <p>La Inteligencia Artificial (IA) se refiere a sistemas que imitan la inteligencia humana para realizar tareas como aprender, razonar y resolver problemas. En Drivim, la IA es una herramienta estratégica diseñada para revolucionar los procesos internos, aumentar la eficiencia y alcanzar nuevas metas de éxito. Actúa como un asistente capaz de automatizar tareas repetitivas, generar ideas y contenido, investigar y sintetizar información, y optimizar la toma de decisiones.</p>
+                    </div>
+                </details>
+                <details>
+                    <summary>¿Qué es un Chatbot?</summary>
+                    <div class="details-content">
+                        <p>Un Chatbot es un programa de IA diseñado para simular y procesar conversaciones humanas, ya sean escritas o habladas. Permite a los usuarios interactuar con dispositivos digitales como si hablaran con una persona real. En Drivim, los chatbots pueden ser útiles para la atención al cliente, responder consultas rápidas sobre productos o servicios, y ofrecer soporte interno a los empleados.</p>
+                    </div>
+                </details>
+                <details>
+                    <summary>¿Qué es un Prompt?</summary>
+                    <div class="details-content">
+                        <p>Un Prompt es la instrucción o pregunta específica que le das a un modelo de Inteligencia Artificial para guiar su respuesta. Es la clave para dirigir a la IA hacia el resultado deseado, ya sea la generación de texto, ideas, resúmenes o cualquier otra tarea. Un prompt bien elaborado es fundamental para obtener resultados precisos y útiles.</p>
+                    </div>
+                </details>
+                <details>
+                    <summary>¿Qué es un Agente de IA?</summary>
+                    <div class="details-content">
+                        <p>Un Agente de IA es un sistema de Inteligencia Artificial que no solo procesa información, sino que también puede tomar decisiones y realizar acciones de forma autónoma para lograr un objetivo específico dentro de un entorno. A diferencia de un chatbot que solo responde, un agente podría, por ejemplo, gestionar una secuencia de tareas o interactuar con otras herramientas para completar un proceso.</p>
+                    </div>
+                </details>
+                <details>
+                    <summary>¿Qué es la Automatización con IA?</summary>
+                    <div class="details-content">
+                        <p>La Automatización con IA es el uso de la Inteligencia Artificial para realizar tareas repetitivas, complejas o basadas en datos sin intervención humana directa. Esto mejora la eficiencia, reduce los errores y libera a los empleados para que se enfoquen en actividades de mayor valor. En Drivim, podría aplicarse a la gestión de inventarios, la clasificación de correos electrónicos o la generación de informes rutinarios.</p>
+                    </div>
+                </details>
+                <details>
+                    <summary>¿Qué es un Token y por qué es importante optimizar su uso?</summary>
+                    <div class="details-content">
+                        <p>Un Token es la unidad básica de texto que una Inteligencia Artificial procesa. Las palabras, partes de palabras o incluso signos de puntuación se dividen en tokens. Optimizar el uso de tokens es crucial porque influye directamente en la velocidad de respuesta de la IA y en el consumo de recursos (y, por ende, en los costes si se usa a gran escala). Un prompt conciso y directo utiliza menos tokens, lo que resulta en interacciones más rápidas y eficientes.</p>
                     </div>
                 </details>
                 <details>
@@ -494,12 +648,6 @@
                     </div>
                 </details>
                 <details>
-                    <summary>¿Cómo se puede optimizar el uso de tokens y por qué es importante?</summary>
-                    <div class="details-content">
-                        <p>Los "tokens" son las "monedas" que la IA utiliza para procesar texto, donde cada palabra o signo de puntuación tiene un "costo". Optimizar el uso de tokens es crucial para lograr una mayor velocidad de respuesta, un menor consumo de recursos (y costos asociados) y una interacción más fluida. Esto se logra siendo directo y conciso, evitando saludos y despedidas innecesarios, utilizando listas y puntos clave en lugar de prosa larga, revisando los prompts antes de enviarlos para eliminar redundancias, y especificando el formato de salida deseado.</p>
-                    </div>
-                </details>
-                <details>
                     <summary>¿Cuáles son las aplicaciones prácticas de la IA en Drivim?</summary>
                     <div class="details-content">
                         <p>La IA tiene diversas aplicaciones prácticas en Drivim, abarcando varias áreas operativas. En Marketing y Comunicación, puede generar borradores para redes sociales, blogs, newsletters, ideas para campañas y comunicados de prensa. En Ventas y Atención al Cliente, ayuda a crear plantillas de respuesta, argumentos de venta personalizados y resúmenes de interacciones. Para Operaciones y Administración, facilita la redacción de correos, resúmenes de informes y creación de agendas. Finalmente, en Recursos Humanos, puede asistir en la redacción de descripciones de puestos y preguntas para entrevistas.</p>
@@ -508,13 +656,13 @@
                 <details>
                     <summary>¿Qué técnicas avanzadas se recomiendan para obtener resultados superiores con la IA?</summary>
                     <div class="details-content">
-                        <p>Para obtener resultados superiores, se recomiendan dos técnicas avanzadas. La primera es la Deep Research con IA, que implica comenzar con una pregunta general, luego profundizar en detalles específicos y finalmente sintetizar la información clave. La segunda es el uso de "Canvas" o Documentos Inmersivos, que permite trabajar en proyectos complejos de forma iterativa. Se inicia con un borrador, se itera pidiendo a la IA que "rellene" secciones o realice refinamientos, y se consolida el documento pieza por pieza, manteniendo la coherencia y el contexto.</p>
+                        <p>Para obtener resultados superiores, se recomiendan técnicas avanzadas como la Investigación Profunda (Deep Research), la Cadena de Pensamiento (Chain of Thought) y el Few-Shot Prompting. Estas técnicas implican guiar a la IA a través de un proceso de razonamiento, proporcionarle ejemplos o pedirle que profundice en temas específicos para obtener respuestas más elaboradas y precisas.</p>
                     </div>
                 </details>
                 <details>
                     <summary>¿Qué consideraciones éticas y de buenas prácticas se deben tener al usar la IA?</summary>
                     <div class="details-content">
-                        <p>El uso responsable de la IA es fundamental. Es crucial verificar siempre la información generada por la IA, ya que puede "alucinar" o producir datos incorrectos. La privacidad de datos es primordial: nunca se debe introducir información sensible o confidencial a menos que la plataforma garantice su seguridad. Se debe ser consciente de los sesgos que la IA puede presentar, revisando los resultados para asegurar equidad. La supervisión humana es esencial para garantizar calidad y adecuación cultural, y se debe considerar la transparencia al usar contenido generado por IA en comunicaciones externas.</p>
+                        <p>El uso responsable de la IA es fundamental. Es crucial verificar siempre la información generada por la IA, proteger la privacidad de los datos (nunca introducir información sensible o confidencial), ser consciente de los sesgos que la IA puede presentar, mantener la supervisión humana en todo momento, entender las implicaciones de propiedad intelectual del contenido generado y considerar el impacto de la IA en el empleo y el desarrollo profesional.</p>
                     </div>
                 </details>
                 <details>
@@ -523,6 +671,77 @@
                         <p>Se recomienda dominar la IA mediante la práctica constante y la experimentación. La mejor manera es sumergirse en la interacción, probar diferentes enfoques y no temer guiar y corregir a la IA. Cada interacción es una oportunidad para optimizar y aprender. Es fundamental recordar y aplicar los principios clave: ser claro y específico, contextualizar siempre, asignar roles, dividir tareas complejas, exigir y corregir, y optimizar el uso de tokens. La guía sirve como punto de partida, pero el dominio real se adquiere a través de la experiencia práctica y la iteración continua.</p>
                     </div>
                 </details>
+                <details>
+                    <summary>¿La IA puede reemplazar mi trabajo en Drivim?</summary>
+                    <div class="details-content">
+                        <p>No, la IA en Drivim está diseñada para ser una herramienta que potencia tu trabajo, no para reemplazarlo. Su función es automatizar tareas repetitivas, generar ideas y asistir en el análisis de datos, liberando tu tiempo para enfocarte en actividades que requieren creatividad, pensamiento estratégico, empatía y el toque humano insustituible. La IA es un asistente, no un colega que te sustituirá.</p>
+                    </div>
+                </details>
+                <details>
+                    <summary>¿Puedo usar la IA para comunicarme directamente con clientes?</summary>
+                    <div class="details-content">
+                        <p>Se recomienda usar la IA para generar borradores, ideas o plantillas de comunicación. Sin embargo, toda comunicación final con clientes debe ser revisada y aprobada por un humano para asegurar la precisión, el tono adecuado, la personalización y el cumplimiento de las políticas de Drivim. La interacción directa con clientes requiere la sensibilidad y el juicio que solo un humano puede ofrecer.</p>
+                    </div>
+                </details>
+                <details>
+                    <summary>¿Qué debo hacer si la IA me da una respuesta incorrecta o inapropiada?</summary>
+                    <div class="details-content">
+                        <p>Si la IA proporciona una respuesta incorrecta, irrelevante o inapropiada, no la utilices. En su lugar, intenta reformular tu prompt, siendo más específico, añadiendo más contexto o asignándole un rol diferente. Si el problema persiste, es una buena práctica reportar este tipo de incidencias internamente para que se pueda revisar y mejorar el rendimiento de la herramienta de IA. Recuerda, la supervisión humana es clave.</p>
+                    </div>
+                </details>
+                <details>
+                    <summary>¿Qué es un Modelo de Lenguaje Grande (LLM)?</summary>
+                    <div class="details-content">
+                        <p>Un Modelo de Lenguaje Grande (LLM) es un tipo de programa de Inteligencia Artificial entrenado con vastas cantidades de texto y datos para entender, generar y responder a lenguaje humano de manera coherente y relevante. Gemini, el modelo que potencia esta guía, es un ejemplo de LLM. Son la base de muchas aplicaciones de IA generativa.</p>
+                    </div>
+                </details>
+                <details>
+                    <summary>¿Qué es el Fine-tuning (Ajuste Fino)?</summary>
+                    <div class="details-content">
+                        <p>El Fine-tuning (o Ajuste Fino) es un proceso en el que se toma un modelo de IA pre-entrenado (como un LLM generalista) y se entrena adicionalmente con un conjunto de datos más pequeño y específico para una tarea o dominio particular. Esto permite que el modelo se adapte mejor al vocabulario, estilo y necesidades específicas de una empresa como Drivim, mejorando la calidad de sus respuestas en contextos empresariales.</p>
+                    </div>
+                </details>
+                <details>
+                    <summary>¿En qué consiste la Tokenización?</summary>
+                    <div class="details-content">
+                        <p>La Tokenización es el proceso mediante el cual una cadena de texto se divide en unidades más pequeñas llamadas "tokens". Estos tokens pueden ser palabras completas, partes de palabras, o incluso signos de puntuación. Es la forma en que los modelos de lenguaje "entienden" y procesan el texto. Por ejemplo, la frase "Coche nuevo" podría tokenizarse como ["Coche", "nuevo"], o incluso en unidades más pequeñas dependiendo del modelo.</p>
+                    </div>
+                </details>
+                <details>
+                    <summary>¿Qué es la Cadena de Pensamiento (Chain of Thought)?</summary>
+                    <div class="details-content">
+                        <p>La Cadena de Pensamiento (Chain of Thought) es una técnica de prompting avanzada que consiste en instruir a la IA para que "piense en voz alta" o muestre sus pasos intermedios de razonamiento antes de dar la respuesta final. Al pedir a la IA que desglose un problema complejo en pasos lógicos, se mejora significativamente la precisión en tareas que requieren razonamiento, como problemas matemáticos, lógicos o de planificación. También te permite entender cómo la IA llegó a su conclusión y depurar su proceso.</p>
+                    </div>
+                </details>
+                <details>
+                    <summary>¿Qué es el Few-Shot Prompting?</summary>
+                    <div class="details-content">
+                        <p>El Few-Shot Prompting es una técnica avanzada donde proporcionas a la IA unos pocos ejemplos (de "pocos disparos") de la tarea que quieres que realice antes de pedirle que la complete. Estos ejemplos ayudan a la IA a entender el formato, el estilo y el tipo de respuesta deseado sin necesidad de un entrenamiento extensivo. Por ejemplo, si quieres que la IA resuma textos en un estilo específico, puedes darle 2-3 ejemplos de resúmenes antes de tu solicitud principal.</p>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <section id="ask-ai" class="py-16 bg-blue-50 rounded-xl">
+            <div class="text-center">
+                <h2 class="section-title">✨ Pregúntale a la IA</h2>
+                <p class="section-subtitle">
+                    ¿Tienes alguna duda específica sobre la IA en el contexto de Drivim o sobre cómo aplicarla en tu día a día?
+                    Escribe tu pregunta y deja que nuestra IA te asista.
+                </p>
+            </div>
+            <div class="max-w-3xl mx-auto p-6 card">
+                <label for="ai-question" class="block text-lg font-medium text-gray-700 mb-3">Tu pregunta:</label>
+                <textarea id="ai-question" rows="5" class="mt-1 block w-full prompt-input-field" placeholder="Ej: ¿Cómo puede la IA ayudar al departamento de postventa en Drivim?"></textarea>
+                <button id="ask-ai-button" class="w-full btn-primary font-bold py-2 px-4 rounded-md mt-4">
+                    ✨ Obtener Respuesta de la IA
+                </button>
+                <div id="ai-ask-response-container" class="mt-4 p-4 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap hidden">
+                    <h4 class="font-semibold mb-2 text-[#422680]">Respuesta:</h4>
+                    <div class="spinner mx-auto hidden"></div>
+                    <span class="ai-ask-response-text"></span>
+                </div>
+                <div id="ai-ask-feedback" class="text-center text-red-600 font-semibold mt-2 h-5"></div>
             </div>
         </section>
 
@@ -536,28 +755,48 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const API_KEY = "AIzaSyD-jHievxt28L30FKWf7sMdr-cQrTUTO1k"; // If you want to use models other than gemini-2.0-flash or imagen-3.0-generate-002, provide an API key here. Otherwise, leave this as-is.
+            // *** IMPORTANTE: PEGA TU CLAVE DE API DE GEMINI AQUÍ ***
+            // Puedes obtenerla en Google AI Studio: https://aistudio.google.com/app/apikey
+            const API_KEY = "AIzaSyD-jHievxt28L30FKWf7sMdr-cQrTUTO1k"; 
+            // Si la dejas vacía, las funcionalidades de IA no funcionarán en GitHub Pages.
 
             // Data for Use Cases
             const useCases = [
                 { category: 'marketing', title: 'Ideas para Redes Sociales', description: 'Generar 5 ideas para posts de Instagram sobre el nuevo modelo eléctrico, enfocados en sostenibilidad y rendimiento.', icon: '📣' },
                 { category: 'marketing', title: 'Redacción de Blog', description: 'Escribir un borrador de 300 palabras para un post de blog titulado "5 Ventajas de la Conducción Híbrida".', icon: '📣' },
-                { category: 'ventas', title: 'Argumentario de Venta', description: 'Crear un argumentario de venta para el nuevo SUV, destacando 3 características clave para familias.', icon: '🤝' },
-                { category: 'ventas', title: 'Plantilla de Correo', description: 'Redactar una plantilla de correo de seguimiento para un cliente que ha probado un coche, preguntando por su experiencia.', icon: '🤝' },
-                { category: 'operaciones', title: 'Resumen de Reunión', description: 'Resumir los puntos clave y las acciones a seguir de una transcripción de reunión de equipo.', icon: '⚙️' },
-                { category: 'operaciones', title: 'Correo Interno', description: 'Redactar un comunicado interno sobre la nueva política de teletrabajo, con un tono claro y conciso.', icon: '⚙️' },
-                { category: 'rrhh', title: 'Descripción de Puesto', description: 'Crear una descripción de puesto para un "Asesor Comercial Junior", incluyendo responsabilidades y requisitos.', icon: '🧑‍🤝‍🧑' },
-                { category: 'rrhh', title: 'Preguntas para Entrevista', description: 'Generar 10 preguntas de entrevista conductual para un puesto de manager de equipo.', icon: '🧑‍🤝‍🧑' },
                 { category: 'marketing', title: 'Responder Reseña Positiva', description: 'Redactar una respuesta amable y personalizada a una reseña positiva de un cliente sobre su experiencia en Drivim.', icon: '👍' },
                 { category: 'marketing', title: 'Responder Reseña Negativa', description: 'Redactar una respuesta profesional y empática a una reseña negativa, ofreciendo una solución o contacto para resolver el problema.', icon: '👎' },
+                { category: 'marketing', title: 'Crear Contenido para Anuncios Digitales', description: 'Generar textos persuasivos y creativos para anuncios de Google Ads o redes sociales, destacando ofertas o modelos específicos.', icon: '✍️' },
+                { category: 'marketing', title: 'Extraer Información Clave de Documentos de Marca', description: 'Analizar un documento extenso (ej. guía de marca, informe de campaña) y extraer los puntos clave, mensajes principales y acciones recomendadas en un resumen detallado.', icon: '📄' },
+
+                { category: 'ventas', title: 'Argumentario de Venta', description: 'Crear un argumentario de venta para el nuevo SUV, destacando 3 características clave para familias.', icon: '🤝' },
+                { category: 'ventas', title: 'Plantilla de Correo', description: 'Redactar una plantilla de correo de seguimiento para un cliente que ha probado un coche, preguntando por su experiencia.', icon: '🤝' },
+                { category: 'ventas', title: 'Preparar Respuestas a Objeciones Comunes', description: 'Desarrollar argumentos y respuestas efectivas para las objeciones más frecuentes de los clientes durante el proceso de venta de vehículos.', icon: '💬' },
+                { category: 'ventas', title: 'Consultar Chatbot de Ventas (Cliente)', description: 'Realizar una consulta al chatbot de ventas sobre el historial de interacción, preferencias o estado actual de un cliente específico para preparar una llamada o reunión.', icon: '👤' },
+                { category: 'ventas', title: 'Consultar Chatbot de Ventas (Empresa)', description: 'Realizar una consulta al chatbot de ventas sobre información relevante de una empresa (ej. tamaño, sector, necesidades) para una propuesta comercial.', icon: '🏢' },
+
+
+                { category: 'operaciones', title: 'Resumen de Reunión', description: 'Resumir los puntos clave y las acciones a seguir de una transcripción de reunión de equipo.', icon: '⚙️' },
+                { category: 'operaciones', title: 'Correo Interno', description: 'Redactar un comunicado interno sobre la nueva política de teletrabajo, con un tono claro y conciso.', icon: '⚙️' },
                 { category: 'operaciones', title: 'Consultar Stock de Modelo', description: 'Obtener información precisa sobre el stock disponible de un modelo de vehículo específico, incluyendo variantes y ubicaciones.', icon: '📦' },
-                { category: 'operaciones', title: 'Consultar Características de Modelo', description: 'Detallar las características técnicas y principales ventajas de un modelo de vehículo en particular para un cliente interesado.', icon: '⚙️' }
+                { category: 'operaciones', title: 'Consultar Características de Modelo', description: 'Detallar las características técnicas y principales ventajas de un modelo de vehículo en particular para un cliente interesado.', icon: '⚙️' },
+                { category: 'operaciones', title: 'Extraer Datos de Documentos y Crear Tabla', description: 'Procesar un documento (ej. informe de ventas, lista de inventario) y extraer datos específicos para organizarlos en una tabla con columnas definidas (ej. Modelo, Cantidad, Precio).', icon: '📊' },
+
+                { category: 'rrhh', title: 'Descripción de Puesto', description: 'Crear una descripción de puesto para un "Asesor Comercial Junior", incluyendo responsabilidades y requisitos.', icon: '🧑‍🤝‍🧑' },
+                { category: 'rrhh', title: 'Preguntas para Entrevista', description: 'Generar 10 preguntas de entrevista conductual para un puesto de manager de equipo.', icon: '🧑‍🤝‍🧑' },
+                { category: 'rrhh', title: 'Generar Ideas para Programas de Formación', description: 'Proponer ideas innovadoras para programas de formación y desarrollo profesional para el equipo de Drivim, adaptados a las necesidades actuales del sector.', icon: '🎓' }
             ];
 
             const useCasesGrid = document.getElementById('use-cases-grid');
             const filterButtons = document.querySelectorAll('.filter-btn');
 
             async function callGeminiAPI(prompt) {
+                // Check if API_KEY is provided
+                if (!API_KEY) {
+                    console.error("API_KEY is not set. Please get your API key from Google AI Studio and paste it in the script.");
+                    return 'Error: Clave de API no configurada. Por favor, consulta las instrucciones en el código.';
+                }
+
                 let chatHistory = [];
                 chatHistory.push({ role: "user", parts: [{ text: prompt }] });
                 const payload = { contents: chatHistory };
@@ -576,11 +815,11 @@
                         return result.candidates[0].content.parts[0].text;
                     } else {
                         console.error('Unexpected API response structure:', result);
-                        return 'Error: No se pudo generar la respuesta.';
+                        return 'Error: No se pudo generar la respuesta. La estructura de la API no es la esperada.';
                     }
                 } catch (error) {
                     console.error('Error calling Gemini API:', error);
-                    return 'Error al conectar con la IA. Inténtalo de nuevo.';
+                    return 'Error al conectar con la IA. Asegúrate de que tu clave de API sea correcta y que no haya restricciones de red.';
                 }
             }
 
@@ -888,6 +1127,38 @@
                         link.classList.add('active');
                     }
                 });
+            });
+
+            // New "Ask AI" functionality
+            const aiQuestionInput = document.getElementById('ai-question');
+            const askAiButton = document.getElementById('ask-ai-button');
+            const aiAskResponseContainer = document.getElementById('ai-ask-response-container');
+            const aiAskResponseText = aiAskResponseContainer.querySelector('.ai-ask-response-text');
+            const aiAskResponseSpinner = aiAskResponseContainer.querySelector('.spinner');
+            const aiAskFeedback = document.getElementById('ai-ask-feedback');
+
+            askAiButton.addEventListener('click', async () => {
+                const question = aiQuestionInput.value.trim();
+                if (!question) {
+                    aiAskFeedback.textContent = 'Por favor, escribe tu pregunta.';
+                    setTimeout(() => aiAskFeedback.textContent = '', 3000);
+                    return;
+                }
+
+                aiAskResponseContainer.classList.remove('hidden');
+                aiAskResponseText.textContent = '';
+                aiAskResponseSpinner.classList.remove('hidden');
+                askAiButton.disabled = true;
+                aiAskFeedback.textContent = '';
+
+                // Contextualize the question for the AI
+                const fullPrompt = `Como asistente de IA para Drivim, una empresa de venta de vehículos, responde a la siguiente pregunta de un empleado. Sé conciso, útil y enfocado en el contexto de Drivim:\n\n"${question}"`;
+                
+                const response = await callGeminiAPI(fullPrompt);
+
+                aiAskResponseSpinner.classList.add('hidden');
+                aiAskResponseText.textContent = response;
+                askAiButton.disabled = false;
             });
         });
     </script>
