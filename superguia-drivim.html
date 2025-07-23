@@ -132,6 +132,33 @@
             color: #555;
             line-height: 1.6;
         }
+        /* Specific styling for the initial heading span */
+        .text-[#D9534F] { /* This was the old terracotta, now adjusted to complement */
+            color: #422680; /* Drivim Secondary Color */
+        }
+
+        /* Styles for expanded content in Principles and Ethical sections */
+        .expanded-content, .expanded-ethical-content {
+            font-size: 0.95rem; /* Slightly larger font */
+            line-height: 1.7; /* More relaxed line height */
+            padding: 1rem; /* More padding */
+            border: 1px solid #e0e0e0; /* Subtle border */
+            background-color: #fcfcfc; /* Very light background for contrast */
+        }
+
+        /* Styles for input fields in Taller de Prompts */
+        .prompt-input-field {
+            border: 1px solid #a0a0a0; /* More visible border */
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .prompt-input-field:focus {
+            outline: none;
+            border-color: #00cade; /* Drivim Secondary Color on focus */
+            box-shadow: 0 0 0 3px rgba(0, 202, 222, 0.2); /* Subtle focus ring */
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -248,26 +275,30 @@
                 <div class="space-y-4">
                     <div>
                         <label for="prompt-rol" class="block text-sm font-medium text-gray-700">1. Rol de la IA (Ej: experto en ventas)</label>
-                        <input type="text" id="prompt-rol" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Actúa como...">
+                        <input type="text" id="prompt-rol" class="mt-1 block w-full prompt-input-field" placeholder="Actúa como...">
                     </div>
                     <div>
                         <label for="prompt-contexto" class="block text-sm font-medium text-gray-700">2. Contexto (Ej: Trabajo en Drivim, área Jeep)</label>
-                        <textarea id="prompt-contexto" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Mi situación es..."></textarea>
+                        <textarea id="prompt-contexto" rows="3" class="mt-1 block w-full prompt-input-field" placeholder="Mi situación es..."></textarea>
                     </div>
                     <div>
                         <label for="prompt-tarea" class="block text-sm font-medium text-gray-700">3. Tarea (Ej: Genera 3 ideas para un post)</label>
-                        <textarea id="prompt-tarea" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Necesito que hagas..."></textarea>
+                        <textarea id="prompt-tarea" rows="3" class="mt-1 block w-full prompt-input-field" placeholder="Necesito que hagas..."></textarea>
                     </div>
                     <div>
                         <label for="prompt-formato" class="block text-sm font-medium text-gray-700">4. Formato y Restricciones (Ej: Formato tabla, tono profesional)</label>
-                        <textarea id="prompt-formato" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="El resultado debe ser..."></textarea>
+                        <textarea id="prompt-formato" rows="3" class="mt-1 block w-full prompt-input-field" placeholder="El resultado debe ser..."></textarea>
                     </div>
+                    <button id="clear-prompt-button" class="w-full btn-secondary font-bold py-2 px-4 rounded-md">
+                        Limpiar Campos
+                    </button>
                 </div>
                 <div class="card p-6 flex flex-col">
                     <h3 class="text-lg font-semibold mb-2">Prompt Optimizado Generado:</h3>
                     <div id="prompt-resultado-container" class="flex-grow bg-gray-100 rounded-md p-4 text-sm text-gray-800 whitespace-pre-wrap overflow-auto">
                         <span class="text-gray-400">Tu prompt aparecerá aquí...</span>
                     </div>
+                    <div id="prompt-char-count" class="text-xs text-gray-500 mt-2"></div>
                     <div class="flex flex-col sm:flex-row gap-2 mt-4">
                         <button id="copy-button" class="w-full btn-primary font-bold py-2 px-4 rounded-md disabled:bg-gray-400" disabled>
                             Copiar Prompt
@@ -276,7 +307,16 @@
                             ✨ Optimizar Prompt
                         </button>
                     </div>
+                    <button id="test-prompt-button" class="w-full btn-primary font-bold py-2 px-4 rounded-md mt-2 disabled:bg-gray-400" disabled>
+                        ✨ Probar Prompt con IA
+                    </button>
                     <div id="prompt-feedback" class="text-center text-green-600 font-semibold mt-2 h-5"></div>
+
+                    <div id="ai-response-container" class="mt-4 p-4 bg-blue-50 rounded-md text-sm text-gray-800 whitespace-pre-wrap hidden">
+                        <h4 class="font-semibold mb-2 text-[#422680]">Respuesta de la IA:</h4>
+                        <div class="spinner mx-auto hidden"></div>
+                        <span class="ai-response-text"></span>
+                    </div>
                 </div>
             </div>
         </section>
@@ -603,22 +643,49 @@
             const resultadoContainer = document.getElementById('prompt-resultado-container');
             const copyButton = document.getElementById('copy-button');
             const optimizePromptButton = document.getElementById('optimize-prompt-button');
+            const testPromptButton = document.getElementById('test-prompt-button');
+            const clearPromptButton = document.getElementById('clear-prompt-button');
             const promptFeedback = document.getElementById('prompt-feedback');
+            const promptCharCount = document.getElementById('prompt-char-count');
+            const aiResponseContainer = document.getElementById('ai-response-container');
+            const aiResponseText = aiResponseContainer.querySelector('.ai-response-text');
+            const aiResponseSpinner = aiResponseContainer.querySelector('.spinner');
+
+            // Function to estimate tokens (very basic, for demonstration)
+            function estimateTokens(text) {
+                // A very rough estimate: ~4 characters per token for English. Spanish might be slightly different.
+                return Math.ceil(text.length / 4);
+            }
 
             function updatePrompt() {
                 const promptParts = inputs.map(input => input.value.trim()).filter(Boolean);
-                if (promptParts.length > 0) {
-                    resultadoContainer.textContent = promptParts.join('\n');
+                const generatedPrompt = promptParts.join('\n');
+
+                if (generatedPrompt.length > 0) {
+                    resultadoContainer.textContent = generatedPrompt;
                     copyButton.disabled = false;
                     optimizePromptButton.disabled = false;
+                    testPromptButton.disabled = false;
+                    promptCharCount.textContent = `Caracteres: ${generatedPrompt.length} | Tokens (est.): ${estimateTokens(generatedPrompt)}`;
                 } else {
                     resultadoContainer.innerHTML = '<span class="text-gray-400">Tu prompt aparecerá aquí...</span>';
                     copyButton.disabled = true;
                     optimizePromptButton.disabled = true;
+                    testPromptButton.disabled = true;
+                    promptCharCount.textContent = '';
+                    aiResponseContainer.classList.add('hidden'); // Hide AI response when prompt is empty
                 }
             }
 
             inputs.forEach(input => input.addEventListener('input', updatePrompt));
+
+            clearPromptButton.addEventListener('click', () => {
+                inputs.forEach(input => input.value = '');
+                updatePrompt(); // Update display and disable buttons
+                promptFeedback.textContent = ''; // Clear any feedback
+                aiResponseContainer.classList.add('hidden'); // Hide AI response
+                aiResponseText.textContent = '';
+            });
 
             copyButton.addEventListener('click', () => {
                 const textToCopy = resultadoContainer.textContent;
@@ -647,6 +714,7 @@
                 promptFeedback.innerHTML = '<div class="spinner mx-auto"></div>';
                 optimizePromptButton.disabled = true;
                 copyButton.disabled = true;
+                testPromptButton.disabled = true;
 
                 const optimizationPrompt = `Optimiza el siguiente prompt para mayor claridad y concisión, eliminando palabras innecesarias y asegurando que sea directo. Solo devuelve el prompt optimizado, sin explicaciones:\n\n${originalPrompt}`;
                 const optimizedText = await callGeminiAPI(optimizationPrompt);
@@ -660,7 +728,33 @@
                 }
                 optimizePromptButton.disabled = false;
                 copyButton.disabled = false;
+                testPromptButton.disabled = false;
                 setTimeout(() => promptFeedback.textContent = '', 3000);
+            });
+
+            testPromptButton.addEventListener('click', async () => {
+                const promptToTest = resultadoContainer.textContent;
+                if (!promptToTest || promptToTest.includes('Tu prompt aparecerá aquí...')) {
+                    promptFeedback.textContent = 'Primero genera un prompt para probar.';
+                    return;
+                }
+
+                aiResponseContainer.classList.remove('hidden');
+                aiResponseText.textContent = '';
+                aiResponseSpinner.classList.remove('hidden');
+                testPromptButton.disabled = true;
+                copyButton.disabled = true;
+                optimizePromptButton.disabled = true;
+                clearPromptButton.disabled = true;
+
+                const response = await callGeminiAPI(promptToTest);
+
+                aiResponseSpinner.classList.add('hidden');
+                aiResponseText.textContent = response;
+                testPromptButton.disabled = false;
+                copyButton.disabled = false;
+                optimizePromptButton.disabled = false;
+                clearPromptButton.disabled = false;
             });
 
 
