@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Superguía Interactiva de IA para Drivim</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Drivim Brand Colors (Main: #422680, Secondary: #00cade, Dark Gray, White) -->
+    <!-- Application Structure Plan: A single-page app with sticky top navigation. The structure is thematic and task-oriented, not linear like the source document, to improve engagement and usability. Key sections include an interactive 'Prompt Workshop' and filterable 'Use Cases' to provide practical tools. This structure turns a passive guide into an active learning experience. New sections for 'Glosario' and 'Q&A' are added for quick reference and common queries. -->
+    <!-- Visualization & Content Choices: Prompting principles are shown with interactive cards (HTML/CSS/JS) for engagement. Token optimization is visualized with a Chart.js bar chart to make the concept of 'saving' tangible. Use cases are presented in a filterable gallery (JS) for role-specific relevance. The core of the app is an interactive prompt builder (HTML Form + JS). Glossary and Q&A are presented as structured text, with Q&A using collapsible details for better readability. NO SVG/Mermaid used. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F5F5F5; /* Slightly darker background for better contrast */
+            color: #333333; /* Dark Charcoal */
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #00cade; /* Drivim Secondary Color */
+            border-bottom-color: #00cade;
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .btn-primary {
+            background-color: #422680; /* Drivim Main Color (now purple) */
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #3a2070; /* Slightly darker main color */
+        }
+        .btn-secondary {
+            background-color: #00cade; /* Drivim Secondary Color (now blue) */
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background-color: #00b3d1; /* Slightly darker secondary color */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .section-title {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: #422680; /* Drivim Main Color (now purple) */
+            margin-bottom: 1rem;
+        }
+        .section-subtitle {
+            font-size: 1.125rem;
+            color: #555;
+            max-width: 800px;
+            margin: 0 auto 3rem auto;
+        }
+        .filter-btn {
+            transition: all 0.3s ease;
+        }
+        .filter-btn.active {
+            background-color: #422680; /* Drivim Main Color (now purple) */
+            color: white;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #422680; /* Drivim Main Color (now purple) */
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        details {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+        summary {
+            font-weight: 600;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            outline: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #422680; /* Drivim Main Color (now purple) */
+        }
+        summary::-webkit-details-marker {
+            display: none;
+        }
+        summary::after {
+            content: '+';
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+        details[open] summary::after {
+            content: '-';
+            transform: rotate(180deg);
+        }
+        .details-content {
+            padding: 0 1.5rem 1.5rem 1.5rem;
+            color: #555;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <span class="font-bold text-xl text-gray-800">🚀 Guía Interactiva IA Drivim</span>
+                </div>
+                <div class="hidden md:block">
+                    <div id="nav-menu" class="ml-10 flex items-baseline space-x-4">
+                        <a href="#principios" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Principios Clave</a>
+                        <a href="#taller" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Taller de Prompts</a>
+                        <a href="#tecnicas" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Técnicas Pro</a>
+                        <a href="#casos" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Casos de Uso</a>
+                        <a href="#responsable" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Uso Responsable</a>
+                        <a href="#glosario" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Glosario</a>
+                        <a href="#qa" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Preguntas Frecuentes</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+        <section id="inicio" class="text-center py-16">
+            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900">Domina la Interacción con <span class="text-[#422680]">Inteligencia</span> <span class="text-[#00cade]">Artificial</span></h1>
+            <p class="mt-6 max-w-3xl mx-auto text-lg text-gray-600">Bienvenido a la Superguía Interactiva de Drivim. Esta herramienta está diseñada para convertirte en un experto en el uso de la IA, optimizando tus conversaciones para obtener los mejores resultados de forma eficiente y responsable.</p>
+        </section>
+
+        <section id="principios" class="py-16">
+            <div class="text-center">
+                <h2 class="section-title">Principios Clave</h2>
+                <p class="section-subtitle">Para dominar la IA, debes actuar como un "Director de Orquesta" 🎼. Tu claridad es su batuta. Estos son los principios fundamentales para una sinfonía perfecta.</p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="card p-6 flex flex-col">
+                    <h3 class="text-xl font-bold mb-2">💎 1. Sé Claro y Específico</h3>
+                    <p class="text-gray-600 flex-grow">Las instrucciones vagas llevan a resultados genéricos. Define el qué, para quién, el tono y el formato.</p>
+                    <button class="btn-primary font-bold py-2 px-4 rounded-md mt-4 expand-principle-btn">
+                        ✨ Expandir Principio
+                    </button>
+                    <div class="expanded-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap hidden">
+                        <div class="spinner mx-auto hidden"></div>
+                        <span class="content-text"></span>
+                    </div>
+                </div>
+                <div class="card p-6 flex flex-col">
+                    <h3 class="text-xl font-bold mb-2">🌍 2. Contextualiza</h3>
+                    <p class="text-gray-600 flex-grow">Dale a la IA el escenario completo. No asumas que conoce el contexto de tus proyectos o conversaciones previas.</p>
+                    <button class="btn-primary font-bold py-2 px-4 rounded-md mt-4 expand-principle-btn">
+                        ✨ Expandir Principio
+                    </button>
+                    <div class="expanded-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap hidden">
+                        <div class="spinner mx-auto hidden"></div>
+                        <span class="content-text"></span>
+                    </div>
+                </div>
+                <div class="card p-6 flex flex-col">
+                    <h3 class="text-xl font-bold mb-2">🎭 3. Asigna un Rol</h3>
+                    <p class="text-gray-600 flex-grow">Pedirle que actúe como "experto en marketing" o "analista de datos" enfoca su respuesta y mejora la calidad.</p>
+                    <button class="btn-primary font-bold py-2 px-4 rounded-md mt-4 expand-principle-btn">
+                        ✨ Expandir Principio
+                    </button>
+                    <div class="expanded-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap hidden">
+                        <div class="spinner mx-auto hidden"></div>
+                        <span class="content-text"></span>
+                    </div>
+                </div>
+                <div class="card p-6 flex flex-col">
+                    <h3 class="text-xl font-bold mb-2">🪜 4. Divide Tareas Complejas</h3>
+                    <p class="text-gray-600 flex-grow">No pidas un plan completo de una vez. Divídelo en partes más pequeñas y manejables para mejores resultados.</p>
+                    <button class="btn-primary font-bold py-2 px-4 rounded-md mt-4 expand-principle-btn">
+                        ✨ Expandir Principio
+                    </button>
+                    <div class="expanded-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap hidden">
+                        <div class="spinner mx-auto hidden"></div>
+                        <span class="content-text"></span>
+                    </div>
+                </div>
+                <div class="card p-6 flex flex-col">
+                    <h3 class="text-xl font-bold mb-2">🔍 5. Exige y Corrige</h3>
+                    <p class="text-gray-600 flex-grow">No te conformes con la primera respuesta. Pide revisiones, correcciones y mejoras. ¡Tú diriges!</p>
+                    <button class="btn-primary font-bold py-2 px-4 rounded-md mt-4 expand-principle-btn">
+                        ✨ Expandir Principio
+                    </button>
+                    <div class="expanded-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap hidden">
+                        <div class="spinner mx-auto hidden"></div>
+                        <span class="content-text"></span>
+                    </div>
+                </div>
+                <div class="card p-6 flex flex-col">
+                    <h3 class="text-xl font-bold mb-2">💸 6. Optimiza Tokens</h3>
+                    <p class="text-gray-600 flex-grow">Sé directo y conciso. Evita saludos y palabras innecesarias para ahorrar recursos y obtener respuestas más rápidas.</p>
+                    <button class="btn-primary font-bold py-2 px-4 rounded-md mt-4 expand-principle-btn">
+                        ✨ Expandir Principio
+                    </button>
+                    <div class="expanded-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap hidden">
+                        <div class="spinner mx-auto hidden"></div>
+                        <span class="content-text"></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="taller" class="py-16 bg-gray-50 rounded-xl">
+            <div class="text-center">
+                <h2 class="section-title">Taller de Prompts</h2>
+                <p class="section-subtitle">Pasa de la teoría a la práctica. Utiliza esta herramienta para construir prompts perfectamente estructurados y optimizados. ¡Solo tienes que rellenar los campos y copiar el resultado!</p>
+            </div>
+            <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
+                <div class="space-y-4">
+                    <div>
+                        <label for="prompt-rol" class="block text-sm font-medium text-gray-700">1. Rol de la IA (Ej: experto en ventas)</label>
+                        <input type="text" id="prompt-rol" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Actúa como...">
+                    </div>
+                    <div>
+                        <label for="prompt-contexto" class="block text-sm font-medium text-gray-700">2. Contexto (Ej: Trabajo en Drivim, área Jeep)</label>
+                        <textarea id="prompt-contexto" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Mi situación es..."></textarea>
+                    </div>
+                    <div>
+                        <label for="prompt-tarea" class="block text-sm font-medium text-gray-700">3. Tarea (Ej: Genera 3 ideas para un post)</label>
+                        <textarea id="prompt-tarea" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="Necesito que hagas..."></textarea>
+                    </div>
+                    <div>
+                        <label for="prompt-formato" class="block text-sm font-medium text-gray-700">4. Formato y Restricciones (Ej: Formato tabla, tono profesional)</label>
+                        <textarea id="prompt-formato" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" placeholder="El resultado debe ser..."></textarea>
+                    </div>
+                </div>
+                <div class="card p-6 flex flex-col">
+                    <h3 class="text-lg font-semibold mb-2">Prompt Optimizado Generado:</h3>
+                    <div id="prompt-resultado-container" class="flex-grow bg-gray-100 rounded-md p-4 text-sm text-gray-800 whitespace-pre-wrap overflow-auto">
+                        <span class="text-gray-400">Tu prompt aparecerá aquí...</span>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-2 mt-4">
+                        <button id="copy-button" class="w-full btn-primary font-bold py-2 px-4 rounded-md disabled:bg-gray-400" disabled>
+                            Copiar Prompt
+                        </button>
+                        <button id="optimize-prompt-button" class="w-full btn-secondary font-bold py-2 px-4 rounded-md disabled:bg-gray-400" disabled>
+                            ✨ Optimizar Prompt
+                        </button>
+                    </div>
+                    <div id="prompt-feedback" class="text-center text-green-600 font-semibold mt-2 h-5"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tecnicas" class="py-16">
+            <div class="text-center">
+                <h2 class="section-title">Técnicas Pro</h2>
+                <p class="section-subtitle">Eleva tu nivel con estas técnicas avanzadas. Aprende a investigar en profundidad y a visualizar el impacto de la optimización de tokens.</p>
+            </div>
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="card p-8">
+                    <h3 class="text-2xl font-bold mb-4">Visualiza el Ahorro de Tokens</h3>
+                    <p class="text-gray-600 mb-6">Un prompt conciso no solo es más claro, sino que ahorra recursos. Observa la diferencia entre un prompt "inflado" y uno optimizado. Menos tokens significan respuestas más rápidas y eficientes.</p>
+                    <div class="chart-container">
+                        <canvas id="tokenChart"></canvas>
+                    </div>
+                </div>
+                <div class="card p-8">
+                    <h3 class="text-2xl font-bold mb-4">Investigación Profunda (Deep Research)</h3>
+                    <p class="text-gray-600 mb-4">Usa la IA como un analista de investigación. Empieza con una pregunta general y profundiza con preguntas cada vez más específicas para obtener un conocimiento experto sobre cualquier tema.</p>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-blue-50 rounded-lg">
+                            <p class="font-semibold">Paso 1: Visión General</p>
+                            <p class="text-sm text-gray-700">"Dame una visión general sobre las tendencias actuales en vehículos autónomos."</p>
+                        </div>
+                        <div class="p-4 bg-blue-100 rounded-lg">
+                            <p class="font-semibold">Paso 2: Profundiza</p>
+                            <p class="text-sm text-gray-700">"Ahora, detalla los desafíos regulatorios y éticos en Europa."</p>
+                        </div>
+                        <div class="p-4 bg-blue-200 rounded-lg">
+                            <p class="font-semibold">Paso 3: Sintetiza</p>
+                            <p class="text-sm text-gray-700">"Resume en 3 puntos clave las oportunidades de negocio para Drivim."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="casos" class="py-16 bg-gray-50 rounded-xl">
+            <div class="text-center">
+                <h2 class="section-title">Casos de Uso en Drivim</h2>
+                <p class="section-subtitle">Descubre cómo aplicar la IA en tu día a día. Filtra por departamento para encontrar ejemplos y plantillas de prompts relevantes para tu rol.</p>
+            </div>
+            <div class="flex justify-center space-x-2 md:space-x-4 mb-8 flex-wrap">
+                <button class="filter-btn active px-4 py-2 rounded-full font-semibold bg-white shadow-sm mb-2" data-filter="all">Todos</button>
+                <button class="filter-btn px-4 py-2 rounded-full font-semibold bg-white shadow-sm mb-2" data-filter="marketing">📣 Marketing</button>
+                <button class="filter-btn px-4 py-2 rounded-full font-semibold bg-white shadow-sm mb-2" data-filter="ventas">🤝 Ventas</button>
+                <button class="filter-btn px-4 py-2 rounded-full font-semibold bg-white shadow-sm mb-2" data-filter="operaciones">⚙️ Operaciones</button>
+                <button class="filter-btn px-4 py-2 rounded-full font-semibold bg-white shadow-sm mb-2" data-filter="rrhh">🧑‍🤝‍🧑 RRHH</button>
+            </div>
+            <div id="use-cases-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            </div>
+        </section>
+
+        <section id="responsable" class="py-16">
+            <div class="text-center">
+                <h2 class="section-title">Uso Responsable</h2>
+                <p class="section-subtitle">Una gran poder conlleva una gran responsabilidad. Usa la IA de forma ética y segura siguiendo estas directrices clave.</p>
+            </div>
+            <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="flex items-start space-x-4 p-4 flex-col">
+                    <div class="flex-shrink-0 h-12 w-12 rounded-full bg-red-100 flex items-center justify-center text-2xl mb-2">🛡️</div>
+                    <div>
+                        <h3 class="text-lg font-semibold">Verifica Siempre la Información</h3>
+                        <p class="text-gray-600 mb-4">La IA puede "alucinar" o equivocarse. Nunca confíes ciegamente en sus datos. Contrasta la información crítica.</p>
+                    </div>
+                    <button class="btn-secondary font-bold py-2 px-4 rounded-md mt-auto w-full expand-ethical-btn" data-principle="Verifica Siempre la Información">
+                        ✨ Obtener Consejos Prácticos
+                    </button>
+                    <div class="expanded-ethical-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap hidden w-full">
+                        <div class="spinner mx-auto hidden"></div>
+                        <span class="content-text"></span>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4 p-4 flex-col">
+                    <div class="flex-shrink-0 h-12 w-12 rounded-full bg-yellow-100 flex items-center justify-center text-2xl mb-2">🔒</div>
+                    <div>
+                        <h3 class="text-lg font-semibold">Protege la Privacidad</h3>
+                        <p class="text-gray-600 mb-4">Nunca introduzcas datos sensibles o confidenciales de clientes o de la empresa.</p>
+                    </div>
+                    <button class="btn-secondary font-bold py-2 px-4 rounded-md mt-auto w-full expand-ethical-btn" data-principle="Protege la Privacidad">
+                        ✨ Obtener Consejos Prácticos
+                    </button>
+                    <div class="expanded-ethical-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap hidden w-full">
+                        <div class="spinner mx-auto hidden"></div>
+                        <span class="content-text"></span>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4 p-4 flex-col">
+                    <div class="flex-shrink-0 h-12 w-12 rounded-full bg-green-100 flex items-center justify-center text-2xl mb-2">⚖️</div>
+                    <div>
+                        <h3 class="text-lg font-semibold">Sé Consciente de los Sesgos</h3>
+                        <p class="text-gray-600 mb-4">La IA puede reflejar sesgos existentes en los datos. Revisa los resultados para asegurar que sean justos y equitativos.</p>
+                    </div>
+                    <button class="btn-secondary font-bold py-2 px-4 rounded-md mt-auto w-full expand-ethical-btn" data-principle="Sé Consciente de los Sesgos">
+                        ✨ Obtener Consejos Prácticos
+                    </button>
+                    <div class="expanded-ethical-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap hidden w-full">
+                        <div class="spinner mx-auto hidden"></div>
+                        <span class="content-text"></span>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4 p-4 flex-col">
+                    <div class="flex-shrink-0 h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center text-2xl mb-2">🙋</div>
+                    <div>
+                        <h3 class="text-lg font-semibold">Supervisión Humana</h3>
+                        <p class="text-gray-600 mb-4">La IA es un asistente, no un reemplazo. Tu juicio y supervisión son esenciales para garantizar la calidad.</p>
+                    </div>
+                    <button class="btn-secondary font-bold py-2 px-4 rounded-md mt-auto w-full expand-ethical-btn" data-principle="Supervisión Humana">
+                        ✨ Obtener Consejos Prácticos
+                    </button>
+                    <div class="expanded-ethical-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap hidden w-full">
+                        <div class="spinner mx-auto hidden"></div>
+                        <span class="content-text"></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="glosario" class="py-16 bg-gray-50 rounded-xl">
+            <div class="text-center">
+                <h2 class="section-title">Glosario</h2>
+                <p class="section-subtitle">Aquí encontrarás las definiciones de los términos clave para dominar la Inteligencia Artificial en Drivim.</p>
+            </div>
+            <div class="max-w-3xl mx-auto space-y-6">
+                <div class="card p-6">
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">Inteligencia Artificial (IA)</h3>
+                    <p class="text-gray-600">Para Drivim, la IA es una herramienta estratégica diseñada para revolucionar los procesos internos, aumentar la eficiencia y alcanzar nuevas metas de éxito. Actúa como un asistente capaz de automatizar tareas repetitivas, generar ideas y contenido, investigar y sintetizar información, y optimizar la toma de decisiones.</p>
+                </div>
+                <div class="card p-6">
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">Prompt Engineering</h3>
+                    <p class="text-gray-600">Es el arte de conversar eficazmente con la IA para obtener los mejores resultados. Implica ser extremadamente específico en las solicitudes, proporcionar todo el contexto relevante y estar dispuesto a iterar y corregir las respuestas.</p>
+                </div>
+                <div class="card p-6">
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">Tokens</h3>
+                    <p class="text-gray-600">Son las "monedas" que la IA utiliza para procesar texto. Cada palabra o signo de puntuación tiene un "costo" en tokens. Optimizar su uso es crucial para lograr mayor velocidad y eficiencia.</p>
+                </div>
+                <div class="card p-6">
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">Alucinación (en IA)</h3>
+                    <p class="text-gray-600">Se refiere a cuando la IA genera información incorrecta, inventada o sin base en los datos reales. Es crucial verificar siempre la información.</p>
+                </div>
+                <div class="card p-6">
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">Sesgos (en IA)</h3>
+                    <p class="text-gray-600">Son tendencias o prejuicios que la IA puede reflejar debido a los datos con los que fue entrenada, lo que puede llevar a resultados injustos o discriminatorios.</p>
+                </div>
+                <div class="card p-6">
+                    <h3 class="text-xl font-bold mb-2 text-gray-800">Deep Research con IA</h3>
+                    <p class="text-gray-600">Técnica avanzada que implica usar la IA para investigar en profundidad, comenzando con una pregunta general y luego profundizando con preguntas cada vez más específicas para obtener conocimiento experto.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="qa" class="py-16">
+            <div class="text-center">
+                <h2 class="section-title">Preguntas Frecuentes (Q&A)</h2>
+                <p class="section-subtitle">Encuentra respuestas rápidas a las preguntas más comunes sobre el uso de la IA en Drivim.</p>
+            </div>
+            <div class="max-w-3xl mx-auto space-y-4">
+                <details>
+                    <summary>¿Qué es la IA para Drivim y cuál es su objetivo principal?</summary>
+                    <div class="details-content">
+                        <p>Para Drivim, la Inteligencia Artificial es una herramienta estratégica diseñada para revolucionar los procesos internos, aumentar la eficiencia y alcanzar nuevas metas de éxito. Su objetivo principal es actuar como un asistente capaz de automatizar tareas repetitivas (como redacción de correos o resúmenes), generar ideas y contenido (propuestas de marketing, borradores de documentos), investigar y sintetizar información, y optimizar la toma de decisiones mediante análisis de tendencias. La IA no es una solución mágica, sino un colega extremadamente rápido que requiere instrucciones claras y precisas.</p>
+                    </div>
+                </details>
+                <details>
+                    <summary>¿Cuál es el rol del usuario en la interacción con la IA?</summary>
+                    <div class="details-content">
+                        <p>El usuario es el "Director de Orquesta" y la IA es el "músico talentoso". Esto significa que la claridad de las instrucciones (la "partitura") del usuario es crucial para obtener los mejores resultados (la "sinfonía"). El éxito de la interacción depende directamente de la capacidad del usuario para proporcionar una guía precisa, contextualizar la información, asignar roles a la IA, dividir tareas complejas, y exigir y corregir las respuestas hasta alcanzar el objetivo deseado.</p>
+                    </div>
+                </details>
+                <details>
+                    <summary>¿Qué es el "Prompt Engineering" y cuáles son sus pilares fundamentales?</summary>
+                    <div class="details-content">
+                        <p>El "Prompt Engineering" es el arte de conversar eficazmente con la IA para obtener los mejores resultados. Sus pilares fundamentales son la claridad, la contextualización y la iteración. Esto implica ser extremadamente específico en las solicitudes, proporcionar todo el contexto relevante para que la IA entienda el escenario completo, y estar dispuesto a iterar y corregir las respuestas de la IA hasta que cumplan con las expectativas. Asignar un rol a la IA y dividir tareas complejas en pasos más pequeños también son técnicas clave en este arte.</p>
+                    </div>
+                </details>
+                <details>
+                    <summary>¿Cómo se puede optimizar el uso de tokens y por qué es importante?</summary>
+                    <div class="details-content">
+                        <p>Los "tokens" son las "monedas" que la IA utiliza para procesar texto, donde cada palabra o signo de puntuación tiene un "costo". Optimizar el uso de tokens es crucial para lograr una mayor velocidad de respuesta, un menor consumo de recursos (y costos asociados) y una interacción más fluida. Esto se logra siendo directo y conciso, evitando saludos y despedidas innecesarios, utilizando listas y puntos clave en lugar de prosa larga, revisando los prompts antes de enviarlos para eliminar redundancias, y especificando el formato de salida deseado.</p>
+                    </div>
+                </details>
+                <details>
+                    <summary>¿Cuáles son las aplicaciones prácticas de la IA en Drivim?</summary>
+                    <div class="details-content">
+                        <p>La IA tiene diversas aplicaciones prácticas en Drivim, abarcando varias áreas operativas. En Marketing y Comunicación, puede generar borradores para redes sociales, blogs, newsletters, ideas para campañas y comunicados de prensa. En Ventas y Atención al Cliente, ayuda a crear plantillas de respuesta, argumentos de venta personalizados y resúmenes de interacciones. Para Operaciones y Administración, facilita la redacción de correos, resúmenes de informes y creación de agendas. Finalmente, en Recursos Humanos, puede asistir en la redacción de descripciones de puestos y preguntas para entrevistas.</p>
+                    </div>
+                </details>
+                <details>
+                    <summary>¿Qué técnicas avanzadas se recomiendan para obtener resultados superiores con la IA?</summary>
+                    <div class="details-content">
+                        <p>Para obtener resultados superiores, se recomiendan dos técnicas avanzadas. La primera es la Deep Research con IA, que implica comenzar con una pregunta general, luego profundizar en detalles específicos y finalmente sintetizar la información clave. La segunda es el uso de "Canvas" o Documentos Inmersivos, que permite trabajar en proyectos complejos de forma iterativa. Se inicia con un borrador, se itera pidiendo a la IA que "rellene" secciones o realice refinamientos, y se consolida el documento pieza por pieza, manteniendo la coherencia y el contexto.</p>
+                    </div>
+                </details>
+                <details>
+                    <summary>¿Qué consideraciones éticas y de buenas prácticas se deben tener al usar la IA?</summary>
+                    <div class="details-content">
+                        <p>El uso responsable de la IA es fundamental. Es crucial verificar siempre la información generada por la IA, ya que puede "alucinar" o producir datos incorrectos. La privacidad de datos es primordial: nunca se debe introducir información sensible o confidencial a menos que la plataforma garantice su seguridad. Se debe ser consciente de los sesgos que la IA puede presentar, revisando los resultados para asegurar equidad. La supervisión humana es esencial para garantizar calidad y adecuación cultural, y se debe considerar la transparencia al usar contenido generado por IA en comunicaciones externas.</p>
+                    </div>
+                </details>
+                <details>
+                    <summary>¿Cómo se recomienda empezar a dominar la IA en Drivim?</summary>
+                    <div class="details-content">
+                        <p>Se recomienda dominar la IA mediante la práctica constante y la experimentación. La mejor manera es sumergirse en la interacción, probar diferentes enfoques y no temer guiar y corregir a la IA. Cada interacción es una oportunidad para optimizar y aprender. Es fundamental recordar y aplicar los principios clave: ser claro y específico, contextualizar siempre, asignar roles, dividir tareas complejas, exigir y corregir, y optimizar el uso de tokens. La guía sirve como punto de partida, pero el dominio real se adquiere a través de la experiencia práctica y la iteración continua.</p>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 text-white">
+        <div class="container mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center">
+            <p>&copy; 2025 Drivim. Impulsando el futuro con Inteligencia Artificial.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const API_KEY = ""; // If you want to use models other than gemini-2.0-flash or imagen-3.0-generate-002, provide an API key here. Otherwise, leave this as-is.
+
+            // Data for Use Cases
+            const useCases = [
+                { category: 'marketing', title: 'Ideas para Redes Sociales', description: 'Generar 5 ideas para posts de Instagram sobre el nuevo modelo eléctrico, enfocados en sostenibilidad y rendimiento.', icon: '📣' },
+                { category: 'marketing', title: 'Redacción de Blog', description: 'Escribir un borrador de 300 palabras para un post de blog titulado "5 Ventajas de la Conducción Híbrida".', icon: '📣' },
+                { category: 'ventas', title: 'Argumentario de Venta', description: 'Crear un argumentario de venta para el nuevo SUV, destacando 3 características clave para familias.', icon: '🤝' },
+                { category: 'ventas', title: 'Plantilla de Correo', description: 'Redactar una plantilla de correo de seguimiento para un cliente que ha probado un coche, preguntando por su experiencia.', icon: '🤝' },
+                { category: 'operaciones', title: 'Resumen de Reunión', description: 'Resumir los puntos clave y las acciones a seguir de una transcripción de reunión de equipo.', icon: '⚙️' },
+                { category: 'operaciones', title: 'Correo Interno', description: 'Redactar un comunicado interno sobre la nueva política de teletrabajo, con un tono claro y conciso.', icon: '⚙️' },
+                { category: 'rrhh', title: 'Descripción de Puesto', description: 'Crear una descripción de puesto para un "Asesor Comercial Junior", incluyendo responsabilidades y requisitos.', icon: '🧑‍🤝‍🧑' },
+                { category: 'rrhh', title: 'Preguntas para Entrevista', description: 'Generar 10 preguntas de entrevista conductual para un puesto de manager de equipo.', icon: '🧑‍🤝‍🧑' },
+                { category: 'marketing', title: 'Responder Reseña Positiva', description: 'Redactar una respuesta amable y personalizada a una reseña positiva de un cliente sobre su experiencia en Drivim.', icon: '👍' },
+                { category: 'marketing', title: 'Responder Reseña Negativa', description: 'Redactar una respuesta profesional y empática a una reseña negativa, ofreciendo una solución o contacto para resolver el problema.', icon: '👎' },
+                { category: 'operaciones', title: 'Consultar Stock de Modelo', description: 'Obtener información precisa sobre el stock disponible de un modelo de vehículo específico, incluyendo variantes y ubicaciones.', icon: '📦' },
+                { category: 'operaciones', title: 'Consultar Características de Modelo', description: 'Detallar las características técnicas y principales ventajas de un modelo de vehículo en particular para un cliente interesado.', icon: '⚙️' }
+            ];
+
+            const useCasesGrid = document.getElementById('use-cases-grid');
+            const filterButtons = document.querySelectorAll('.filter-btn');
+
+            async function callGeminiAPI(prompt) {
+                let chatHistory = [];
+                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                const payload = { contents: chatHistory };
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
+
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    const result = await response.json();
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        return result.candidates[0].content.parts[0].text;
+                    } else {
+                        console.error('Unexpected API response structure:', result);
+                        return 'Error: No se pudo generar la respuesta.';
+                    }
+                } catch (error) {
+                    console.error('Error calling Gemini API:', error);
+                    return 'Error al conectar con la IA. Inténtalo de nuevo.';
+                }
+            }
+
+            function displayUseCases(filter) {
+                useCasesGrid.innerHTML = '';
+                const filteredCases = filter === 'all' ? useCases : useCases.filter(c => c.category === filter);
+                filteredCases.forEach((c, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'card p-6 flex flex-col';
+                    card.innerHTML = `
+                        <div class="text-3xl mb-3">${c.icon}</div>
+                        <h3 class="text-xl font-bold mb-2">${c.title}</h3>
+                        <p class="text-gray-600 mb-4">${c.description}</p>
+                        <button class="btn-primary font-bold py-2 px-4 rounded-md mt-auto generate-prompt-btn" data-index="${index}">
+                            ✨ Generar Prompt Completo
+                        </button>
+                        <div class="generated-prompt-container mt-4 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap hidden">
+                            <div class="spinner mx-auto hidden"></div>
+                            <span class="prompt-content"></span>
+                        </div>
+                    `;
+                    useCasesGrid.appendChild(card);
+                });
+
+                document.querySelectorAll('.generate-prompt-btn').forEach(button => {
+                    button.addEventListener('click', async (event) => {
+                        const index = event.target.dataset.index;
+                        const useCase = useCases[index];
+                        const promptContainer = event.target.nextElementSibling;
+                        const promptContentSpan = promptContainer.querySelector('.prompt-content');
+                        const spinner = promptContainer.querySelector('.spinner');
+
+                        promptContainer.classList.remove('hidden');
+                        promptContentSpan.textContent = '';
+                        spinner.classList.remove('hidden');
+                        event.target.disabled = true;
+
+                        const prompt = `Genera un prompt completo y optimizado para la siguiente tarea, asumiendo un rol adecuado y un contexto general de Drivim. La tarea es: "${useCase.title}". Descripción: "${useCase.description}". Incluye rol, contexto, tarea y formato/restricciones. Solo devuelve el prompt, sin explicaciones adicionales.`;
+                        const generatedText = await callGeminiAPI(prompt);
+
+                        spinner.classList.add('hidden');
+                        promptContentSpan.textContent = generatedText;
+                        event.target.disabled = false;
+                    });
+                });
+            }
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    displayUseCases(button.dataset.filter);
+                });
+            });
+
+            displayUseCases('all');
+
+            // Prompt Builder
+            const inputs = ['prompt-rol', 'prompt-contexto', 'prompt-tarea', 'prompt-formato'].map(id => document.getElementById(id));
+            const resultadoContainer = document.getElementById('prompt-resultado-container');
+            const copyButton = document.getElementById('copy-button');
+            const optimizePromptButton = document.getElementById('optimize-prompt-button');
+            const promptFeedback = document.getElementById('prompt-feedback');
+
+            function updatePrompt() {
+                const promptParts = inputs.map(input => input.value.trim()).filter(Boolean);
+                if (promptParts.length > 0) {
+                    resultadoContainer.textContent = promptParts.join('\n');
+                    copyButton.disabled = false;
+                    optimizePromptButton.disabled = false;
+                } else {
+                    resultadoContainer.innerHTML = '<span class="text-gray-400">Tu prompt aparecerá aquí...</span>';
+                    copyButton.disabled = true;
+                    optimizePromptButton.disabled = true;
+                }
+            }
+
+            inputs.forEach(input => input.addEventListener('input', updatePrompt));
+
+            copyButton.addEventListener('click', () => {
+                const textToCopy = resultadoContainer.textContent;
+                
+                const textArea = document.createElement('textarea');
+                textArea.value = textToCopy;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    promptFeedback.textContent = '¡Copiado!';
+                    setTimeout(() => promptFeedback.textContent = '', 2000);
+                } catch (err) {
+                    promptFeedback.textContent = 'Error al copiar';
+                }
+                document.body.removeChild(textArea);
+            });
+
+            optimizePromptButton.addEventListener('click', async () => {
+                const originalPrompt = resultadoContainer.textContent;
+                if (!originalPrompt || originalPrompt.includes('Tu prompt aparecerá aquí...')) {
+                    promptFeedback.textContent = 'Primero genera un prompt.';
+                    return;
+                }
+
+                promptFeedback.innerHTML = '<div class="spinner mx-auto"></div>';
+                optimizePromptButton.disabled = true;
+                copyButton.disabled = true;
+
+                const optimizationPrompt = `Optimiza el siguiente prompt para mayor claridad y concisión, eliminando palabras innecesarias y asegurando que sea directo. Solo devuelve el prompt optimizado, sin explicaciones:\n\n${originalPrompt}`;
+                const optimizedText = await callGeminiAPI(optimizationPrompt);
+
+                promptFeedback.innerHTML = '';
+                if (optimizedText.startsWith('Error')) {
+                    promptFeedback.textContent = optimizedText;
+                } else {
+                    resultadoContainer.textContent = optimizedText;
+                    promptFeedback.textContent = '¡Prompt optimizado!';
+                }
+                optimizePromptButton.disabled = false;
+                copyButton.disabled = false;
+                setTimeout(() => promptFeedback.textContent = '', 3000);
+            });
+
+
+            // Expand Principle feature
+            document.querySelectorAll('.expand-principle-btn').forEach(button => {
+                button.addEventListener('click', async (event) => {
+                    const card = event.target.closest('.card');
+                    const principleTitle = card.querySelector('h3').textContent.replace(/^\d+\.\s*/, '').trim(); // Get principle title
+                    const expandedContentDiv = card.querySelector('.expanded-content');
+                    const contentTextSpan = expandedContentDiv.querySelector('.content-text');
+                    const spinner = expandedContentDiv.querySelector('.spinner');
+
+                    if (expandedContentDiv.classList.contains('hidden') || contentTextSpan.textContent === '') {
+                        expandedContentDiv.classList.remove('hidden');
+                        contentTextSpan.textContent = '';
+                        spinner.classList.remove('hidden');
+                        event.target.disabled = true;
+
+                        const prompt = `Explica en detalle el principio de IA: "${principleTitle}" en el contexto de una empresa como Drivim, que se dedica a la venta de vehículos, y cómo aplicarlo para mejorar la eficiencia y la calidad de las interacciones con IA. Sé conciso pero informativo.`;
+                        const generatedText = await callGeminiAPI(prompt);
+
+                        spinner.classList.add('hidden');
+                        contentTextSpan.textContent = generatedText;
+                        event.target.disabled = false;
+                    } else {
+                        expandedContentDiv.classList.add('hidden');
+                        contentTextSpan.textContent = '';
+                    }
+                });
+            });
+
+            // Generate Ethical Practical Advice feature
+            document.querySelectorAll('.expand-ethical-btn').forEach(button => {
+                button.addEventListener('click', async (event) => {
+                    const card = event.target.closest('.flex-col');
+                    const principleTitle = event.target.dataset.principle;
+                    const expandedContentDiv = card.querySelector('.expanded-ethical-content');
+                    const contentTextSpan = expandedContentDiv.querySelector('.content-text');
+                    const spinner = expandedContentDiv.querySelector('.spinner');
+
+                    if (expandedContentDiv.classList.contains('hidden') || contentTextSpan.textContent === '') {
+                        expandedContentDiv.classList.remove('hidden');
+                        contentTextSpan.textContent = '';
+                        spinner.classList.remove('hidden');
+                        event.target.disabled = true;
+
+                        const prompt = `Genera 3-4 consejos prácticos y accionables para la implementación del principio de uso responsable de la IA: "${principleTitle}" en el día a día de una empresa como Drivim (venta de vehículos). Enfócate en acciones concretas que un empleado pueda llevar a cabo.`;
+                        const generatedText = await callGeminiAPI(prompt);
+
+                        spinner.classList.add('hidden');
+                        contentTextSpan.textContent = generatedText;
+                        event.target.disabled = false;
+                    } else {
+                        expandedContentDiv.classList.add('hidden');
+                        contentTextSpan.textContent = '';
+                    }
+                });
+            });
+
+
+            // Token Optimization Chart
+            const ctx = document.getElementById('tokenChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Prompt "Inflado"', 'Prompt Optimizado'],
+                    datasets: [{
+                        label: 'Número de Tokens (Estimado)',
+                        data: [28, 11],
+                        backgroundColor: [
+                            'rgba(0, 202, 222, 0.6)', /* Secondary color for "Inflado" (blue) */
+                            'rgba(66, 38, 128, 0.6)' /* Main color for "Optimizado" (purple) */
+                        ],
+                        borderColor: [
+                            'rgba(0, 202, 222, 1)',
+                            'rgba(66, 38, 128, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Tokens'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += context.parsed.y + ' tokens';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Active Nav Link on Scroll
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('#nav-menu a');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 80) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').includes(current)) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
