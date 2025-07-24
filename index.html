@@ -24,7 +24,7 @@
             border-bottom: 2px solid transparent;
         }
         .nav-link:hover, .nav-link.active {
-            color: ##422680; /* Drivim Secondary Color for nav links */
+            color: #00cade; /* Drivim Secondary Color for nav links */
             border-bottom-color: #00cade;
         }
         .card {
@@ -164,6 +164,100 @@
         #prompt-resultado-container {
             border: 1px solid #d0d0d0; /* Subtle border */
         }
+
+        /* Quiz specific styles */
+        .quiz-option {
+            background-color: #f0f0f0;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .quiz-option:hover {
+            background-color: #e0e0e0;
+            transform: translateY(-2px);
+        }
+        .quiz-option.selected {
+            border: 2px solid #00cade;
+        }
+        .quiz-option.correct {
+            background-color: #d4edda; /* Light green */
+            border-color: #28a745; /* Green */
+            color: #155724; /* Darker green text */
+        }
+        .quiz-option.incorrect {
+            background-color: #f8d7da; /* Light red */
+            border-color: #dc3545; /* Red */
+            color: #721c24; /* Darker red text */
+        }
+        .quiz-option input[type="radio"] {
+            display: none; /* Hide default radio button */
+        }
+        .quiz-option .custom-radio {
+            width: 1.25rem;
+            height: 1.25rem;
+            border: 2px solid #422680;
+            border-radius: 50%;
+            display: inline-block;
+            position: relative;
+            flex-shrink: 0;
+        }
+        .quiz-option input[type="radio"]:checked + .custom-radio::after {
+            content: '';
+            width: 0.75rem;
+            height: 0.75rem;
+            background-color: #422680;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .quiz-option.correct .custom-radio {
+            border-color: #28a745;
+        }
+        .quiz-option.correct .custom-radio::after {
+            background-color: #28a745;
+        }
+        .quiz-option.incorrect .custom-radio {
+            border-color: #dc3545;
+        }
+        .quiz-option.incorrect .custom-radio::after {
+            background-color: #dc3545;
+        }
+        .quiz-feedback {
+            margin-top: 0.5rem;
+            font-weight: 600;
+            text-align: center;
+        }
+        .quiz-feedback.correct {
+            color: #28a745;
+        }
+        .quiz-feedback.incorrect {
+            color: #dc3545;
+        }
+        .quiz-detail-question {
+            font-weight: 600;
+            color: #422680;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .quiz-detail-answer {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .quiz-detail-answer.correct-answer {
+            background-color: #d4edda;
+            border: 1px solid #28a745;
+        }
+        .quiz-detail-answer.user-incorrect-answer {
+            background-color: #f8d7da;
+            border: 1px solid #dc3545;
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -184,6 +278,7 @@
                         <a href="#tecnicas" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Técnicas Pro</a>
                         <a href="#glosario" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Glosario</a>
                         <a href="#qa" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Preguntas Frecuentes</a>
+                        <a href="#cuestionario" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Cuestionario</a>
                         <a href="#ask-ai" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Pregúntale a la IA</a>
                     </div>
                 </div>
@@ -248,69 +343,113 @@
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <div class="card p-6 flex flex-col">
                     <h3 class="text-xl font-bold mb-2">💎 1. Sé Claro y Específico</h3>
-                    <p class="text-gray-600 flex-grow">Las instrucciones vagas llevan a resultados genéricos. Define el qué, para quién, el tono y el formato.</p>
-                    <button class="btn-primary font-bold py-2 px-4 rounded-md mt-4 expand-principle-btn">
-                        ✨ Expandir Principio
-                    </button>
-                    <div class="expanded-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap hidden">
-                        <div class="spinner mx-auto hidden"></div>
-                        <span class="content-text"></span>
-                    </div>
+                    <p class="text-gray-600 flex-grow mb-4">Las instrucciones vagas llevan a resultados genéricos. Define el qué, para quién, el tono y el formato.</p>
+                    <details>
+                        <summary class="btn-primary font-bold py-2 px-4 rounded-md w-full text-center">
+                            ✨ Expandir Principio
+                        </summary>
+                        <div class="details-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap">
+                            <p>La claridad es el pilar de una interacción exitosa con la IA. Cuando tus instrucciones son vagas, la IA generará respuestas genéricas que rara vez serán útiles. Para obtener resultados precisos y relevantes, debes definir con exactitud:</p>
+                            <ul class="list-disc list-inside mt-2 space-y-1">
+                                <li><span class="font-bold text-[#422680]">Qué quieres:</span> El objetivo final de la tarea (ej. 'un borrador de correo', 'ideas para un post').</li>
+                                <li><span class="font-bold text-[#422680]">Para quién es:</span> La audiencia a la que se dirige el contenido (ej. 'clientes potenciales', 'equipo interno de ventas').</li>
+                                <li><span class="font-bold text-[#422680]">El tono:</span> La voz y el estilo deseado (ej. 'profesional', 'amigable', 'persuasivo').</li>
+                                <li><span class="font-bold text-[#422680]">El formato:</span> Cómo debe estructurarse la respuesta (ej. 'lista de puntos', 'tabla', 'párrafo').</li>
+                            </ul>
+                            <p class="mt-4"><span class="font-bold text-[#00cade]">Ejemplo Práctico:</span> En lugar de 'Necesito algo de marketing', prueba: 'Actúa como un experto en marketing digital de Drivim. Genera 3 ideas para un post de Instagram sobre el nuevo modelo eléctrico, enfocado en sostenibilidad y rendimiento, con un tono entusiasta y un llamado a la acción claro para visitar nuestra web.'"</p>
+                        </div>
+                    </details>
                 </div>
                 <div class="card p-6 flex flex-col">
                     <h3 class="text-xl font-bold mb-2">🌍 2. Contextualiza</h3>
-                    <p class="text-gray-600 flex-grow">Dale a la IA el escenario completo. No asumas que conoce el contexto de tus proyectos o conversaciones previas.</p>
-                    <button class="btn-primary font-bold py-2 px-4 rounded-md mt-4 expand-principle-btn">
-                        ✨ Expandir Principio
-                    </button>
-                    <div class="expanded-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap hidden">
-                        <div class="spinner mx-auto hidden"></div>
-                        <span class="content-text"></span>
-                    </div>
+                    <p class="text-gray-600 flex-grow mb-4">Dale a la IA el escenario completo. No asumas que conoce el contexto de tus proyectos o conversaciones previas.</p>
+                    <details>
+                        <summary class="btn-primary font-bold py-2 px-4 rounded-md w-full text-center">
+                            ✨ Expandir Principio
+                        </summary>
+                        <div class="details-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap">
+                            <p>La IA no tiene memoria de tus conversaciones previas ni conocimiento intrínseco de tu negocio. Para que sus respuestas sean verdaderamente útiles en el contexto de Drivim, debes proporcionarle toda la información relevante:</p>
+                            <ul class="list-disc list-inside mt-2 space-y-1">
+                                <li><span class="font-bold text-[#422680]">Información de fondo:</span> Detalles sobre tu departamento, el proyecto, el cliente o la situación actual.</li>
+                                <li><span class="font-bold text-[#422680]">Conversaciones previas:</span> Si es una continuación, resume los puntos clave anteriores.</li>
+                                <li><span class="font-bold text-[#422680]">Datos específicos:</span> Nombres de modelos, fechas, cifras, políticas internas, etc.</li>
+                            </ul>
+                            <p class="mt-4"><span class="font-bold text-[#00cade]">Ejemplo Práctico:</span> Si estás pidiendo un resumen de un informe, no solo digas 'Resume esto'. En su lugar: 'Soy Juan del departamento de Operaciones de Drivim. Necesito un resumen ejecutivo de este informe de ventas [pegar informe], destacando las 3 principales oportunidades de crecimiento para el próximo trimestre y los modelos con mayor rendimiento. Considera que nuestro objetivo es aumentar las ventas de SUVs.'"</p>
+                        </div>
+                    </details>
                 </div>
                 <div class="card p-6 flex flex-col">
                     <h3 class="text-xl font-bold mb-2">🎭 3. Asigna un Rol</h3>
-                    <p class="text-gray-600 flex-grow">Pedirle que actúe como "experto en marketing" o "analista de datos" enfoca su respuesta y mejora la calidad.</p>
-                    <button class="btn-primary font-bold py-2 px-4 rounded-md mt-4 expand-principle-btn">
-                        ✨ Expandir Principio
-                    </button>
-                    <div class="expanded-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap hidden">
-                        <div class="spinner mx-auto hidden"></div>
-                        <span class="content-text"></span>
-                    </div>
+                    <p class="text-gray-600 flex-grow mb-4">Pedirle que actúe como "experto en marketing" o "analista de datos" enfoca su respuesta y mejora la calidad.</p>
+                    <details>
+                        <summary class="btn-primary font-bold py-2 px-4 rounded-md w-full text-center">
+                            ✨ Expandir Principio
+                        </summary>
+                        <div class="details-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap">
+                            <p>Pedirle a la IA que adopte un rol específico es como darle un disfraz profesional. Esto enfoca su 'personalidad' y su base de conocimientos, permitiéndole generar respuestas con la perspectiva adecuada.</p>
+                            <ul class="list-disc list-inside mt-2 space-y-1">
+                                <li><span class="font-bold text-[#422680]">Roles comunes:</span> 'Experto en marketing', 'asesor de ventas', 'analista de datos', 'redactor creativo', 'especialista en atención al cliente'.</li>
+                                <li><span class="font-bold text-[#422680]">Beneficio:</span> La IA adaptará su vocabulario, estilo y enfoque para alinearse con las expectativas de ese rol, mejorando la calidad y relevancia de la salida.</li>
+                            </ul>
+                            <p class="mt-4"><span class="font-bold text-[#00cade]">Ejemplo Práctico:</span> Para un correo de ventas, en lugar de 'Escribe un correo', prueba: 'Actúa como un <span style="color: #00cade; font-weight: bold;">asesor de ventas experimentado de Drivim</span>. Redacta un correo electrónico persuasivo para un cliente que mostró interés en el modelo X, destacando sus beneficios clave y ofreciendo una prueba de conducción personalizada.'"</p>
+                        </div>
+                    </details>
                 </div>
                 <div class="card p-6 flex flex-col">
                     <h3 class="text-xl font-bold mb-2">🪜 4. Divide Tareas Complejas</h3>
-                    <p class="text-gray-600 flex-grow">No pidas un plan completo de una vez. Divídelo en partes más pequeñas y manejables para mejores resultados.</p>
-                    <button class="btn-primary font-bold py-2 px-4 rounded-md mt-4 expand-principle-btn">
-                        ✨ Expandir Principio
-                    </button>
-                    <div class="expanded-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap hidden">
-                        <div class="spinner mx-auto hidden"></div>
-                        <span class="content-text"></span>
-                    </div>
+                    <p class="text-gray-600 flex-grow mb-4">No pidas un plan completo de una vez. Divídelo en partes más pequeñas y manejables para mejores resultados.</p>
+                    <details>
+                        <summary class="btn-primary font-bold py-2 px-4 rounded-md w-full text-center">
+                            ✨ Expandir Principio
+                        </summary>
+                        <div class="details-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap">
+                            <p>Las tareas grandes y multifacéticas pueden abrumar a la IA y llevar a respuestas incompletas o de baja calidad. Dividirlas en pasos más pequeños y manejables (como una 'cadena de pensamiento') permite a la IA procesar la información de forma más efectiva y te da más control sobre el resultado.</p>
+                            <ul class="list-disc list-inside mt-2 space-y-1">
+                                <li><span class="font-bold text-[#422680]">Paso a paso:</span> Guía a la IA a través de cada fase del proceso.</li>
+                                <li><span class="font-bold text-[#422680]">Iteración:</span> Solicita una parte, revisa, y luego pide la siguiente.</li>
+                                <li><span class="font-bold text-[#422680]">Claridad:</span> Cada mini-tarea debe seguir los principios de claridad y especificidad.</li>
+                            </ul>
+                            <p class="mt-4"><span class="font-bold text-[#00cade]">Ejemplo Práctico:</span> Si necesitas un plan de lanzamiento de producto, no pidas todo de una vez. Primero: 'Genera 5 ideas de nombres para el nuevo modelo deportivo de Drivim.' Luego: 'Ahora, para el nombre X, crea un eslogan pegadizo y 3 mensajes clave.' Y así sucesivamente."</p>
+                        </div>
+                    </details>
                 </div>
                 <div class="card p-6 flex flex-col">
                     <h3 class="text-xl font-bold mb-2">🔍 5. Exige y Corrige</h3>
-                    <p class="text-gray-600 flex-grow">No te conformes con la primera respuesta. Pide revisiones, correcciones y mejoras. ¡Tú diriges!</p>
-                    <button class="btn-primary font-bold py-2 px-4 rounded-md mt-4 expand-principle-btn">
-                        ✨ Expandir Principio
-                    </button>
-                    <div class="expanded-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap hidden">
-                        <div class="spinner mx-auto hidden"></div>
-                        <span class="content-text"></span>
-                    </div>
+                    <p class="text-gray-600 flex-grow mb-4">No te conformes con la primera respuesta. Pide revisiones, correcciones y mejoras. ¡Tú diriges!</p>
+                    <details>
+                        <summary class="btn-primary font-bold py-2 px-4 rounded-md w-full text-center">
+                            ✨ Expandir Principio
+                        </summary>
+                        <div class="details-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap">
+                            <p>La primera respuesta de la IA rara vez será perfecta. La IA es una herramienta iterativa. Debes actuar como un editor exigente, pidiendo revisiones, correcciones y mejoras.</p>
+                            <ul class="list-disc list-inside mt-2 space-y-1">
+                                <li><span class="font-bold text-[#422680]">Feedback específico:</span> No digas 'No me gusta'. Di 'Hazlo más corto', 'Cambia el tono a formal', 'Añade datos de rendimiento del modelo Y'.</li>
+                                <li><span class="font-bold text-[#422680]">Iteración:</span> Continúa refinando hasta que el resultado cumpla tus expectativas.</li>
+                                <li><span class="font-bold text-[#422680]">Tu juicio es clave:</span> La IA no tiene tu experiencia ni tu conocimiento de Drivim.</li>
+                            </ul>
+                            <p class="mt-4"><span class="font-bold text-[#00cade]">Ejemplo Práctico:</span> Después de recibir un borrador de texto: 'Reescribe el segundo párrafo para que sea más conciso y enfocado en los beneficios para el cliente. Reduce su extensión en un 30%.' O: 'El tono es demasiado informal. Hazlo más profesional y alineado con la marca Drivim.'"</p>
+                        </div>
+                    </details>
                 </div>
                 <div class="card p-6 flex flex-col">
                     <h3 class="text-xl font-bold mb-2">💸 6. Optimiza Tokens</h3>
-                    <p class="text-gray-600 flex-grow">Sé directo y conciso. Evita saludos y palabras innecesarias para ahorrar recursos y obtener respuestas más rápidas.</p>
-                    <button class="btn-primary font-bold py-2 px-4 rounded-md mt-4 expand-principle-btn">
-                        ✨ Expandir Principio
-                    </button>
-                    <div class="expanded-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap hidden">
-                        <div class="spinner mx-auto hidden"></div>
-                        <span class="content-text"></span>
-                    </div>
+                    <p class="text-gray-600 flex-grow mb-4">Sé directo y conciso. Evita saludos y palabras innecesarias para ahorrar recursos y obtener respuestas más rápidas.</p>
+                    <details>
+                        <summary class="btn-primary font-bold py-2 px-4 rounded-md w-full text-center">
+                            ✨ Expandir Principio
+                        </summary>
+                        <div class="details-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap">
+                            <p>Los 'tokens' son las unidades de texto que la IA procesa, y cada token tiene un 'costo' (ya sea en tiempo de procesamiento o en recursos). Un prompt conciso no solo es más claro, sino que también es más eficiente.</p>
+                            <ul class="list-disc list-inside mt-2 space-y-1">
+                                <li><span class="font-bold text-[#422680]">Evita rodeos:</span> Elimina saludos, frases introductorias innecesarias o palabras redundantes.</li>
+                                <li><span class="font-bold text-[#422680]">Sé directo:</span> Ve al grano con tu solicitud.</li>
+                                <li><span class="font-bold text-[#422680]">Usa listas:</span> Si es posible, estructura tu prompt con puntos clave en lugar de párrafos largos.</li>
+                            </ul>
+                            <p class="mt-4"><span class="font-bold text-[#00cade]">Ejemplo Práctico:</span> En lugar de: 'Hola, espero que estés bien. Quería pedirte por favor si podrías generar algunas ideas para un nuevo anuncio de televisión para nuestro coche eléctrico, el Drivim Volt, que se enfoca en la eficiencia energética y el diseño moderno. Gracias de antemano.'
+                            <br>
+                            Prueba: 'Genera 3 ideas para un anuncio de TV del Drivim Volt. Enfoque: eficiencia energética y diseño moderno. Formato: breve descripción de la escena y eslogan. Sin saludos ni introducciones.'"</p>
+                        </div>
+                    </details>
                 </div>
             </div>
         </section>
@@ -330,13 +469,19 @@
                         <h3 class="text-lg font-semibold">Verifica Siempre la Información</h3>
                         <p class="text-gray-600 mb-4">La IA, aunque potente, no es infalible. Puede generar información incorrecta o "alucinaciones". Es crucial que todo dato crítico, cifra o afirmación generada por la IA sea <strong class="text-[#422680]">verificado y contrastado con fuentes fiables</strong> antes de su uso. Tu juicio experto es insustituible. No confíes ciegamente; cuestiona y valida.</p>
                     </div>
-                    <button class="btn-secondary font-bold py-2 px-4 rounded-md mt-auto w-full expand-ethical-btn" data-principle="Verifica Siempre la Información">
-                        ✨ Obtener Consejos Prácticos
-                    </button>
-                    <div class="expanded-ethical-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap hidden w-full">
-                        <div class="spinner mx-auto hidden"></div>
-                        <span class="content-text"></span>
-                    </div>
+                    <details>
+                        <summary class="btn-secondary font-bold py-2 px-4 rounded-md w-full text-center">
+                            ✨ Obtener Consejos Prácticos
+                        </summary>
+                        <div class="details-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap">
+                            <ul class="list-disc list-inside mt-2 space-y-1">
+                                <li><span class="font-bold text-[#422680]">1. Cruza Fuentes:</span> Siempre compara la información generada por la IA con al menos dos fuentes fiables e independientes (bases de datos internas, informes oficiales, sitios web de fabricantes).</li>
+                                <li><span class="font-bold text-[#422680]">2. Cifras Críticas:</span> Para datos numéricos (ventas, stock, precios), verifica cada cifra manualmente. Un error aquí puede tener un gran impacto.</li>
+                                <li><span class="font-bold text-[#422680]">3. Juicio Humano:</span> Utiliza la IA para generar ideas o borradores, pero la decisión final y la validación de la información siempre deben recaer en un experto humano de Drivim.</li>
+                                <li><span class="font-bold text-[#422680]">4. Documenta la Verificación:</span> Si la información es crítica, deja constancia de cómo y cuándo fue verificada.</li>
+                            </ul>
+                        </div>
+                    </details>
                 </div>
                 <div class="flex items-start space-x-4 p-4 flex-col">
                     <div class="flex-shrink-0 h-12 w-12 rounded-full bg-yellow-100 flex items-center justify-center text-2xl mb-2">🔒</div>
@@ -344,13 +489,19 @@
                         <h3 class="text-lg font-semibold">Protege la Privacidad</h3>
                         <p class="text-gray-600 mb-4">La seguridad de los datos es primordial. <strong class="text-[#422680]">Nunca introduzcas información sensible, confidencial o personal</strong> de clientes, empleados o de la empresa (como datos financieros, estratégicos, DNI, direcciones, etc.) en modelos de IA públicos o no autorizados. Asegúrate de que cualquier plataforma de IA utilizada cumpla estrictamente con las políticas de protección de datos de Drivim y la legislación vigente (ej. GDPR).</p>
                     </div>
-                    <button class="btn-secondary font-bold py-2 px-4 rounded-md mt-auto w-full expand-ethical-btn" data-principle="Protege la Privacidad">
-                        ✨ Obtener Consejos Prácticos
-                    </button>
-                    <div class="expanded-ethical-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap hidden w-full">
-                        <div class="spinner mx-auto hidden"></div>
-                        <span class="content-text"></span>
-                    </div>
+                    <details>
+                        <summary class="btn-secondary font-bold py-2 px-4 rounded-md w-full text-center">
+                            ✨ Obtener Consejos Prácticos
+                        </summary>
+                        <div class="details-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap">
+                            <ul class="list-disc list-inside mt-2 space-y-1">
+                                <li><span class="font-bold text-[#422680]">1. Datos Anonimizados:</span> Si es posible, utiliza datos anonimizados o ficticios para pruebas y desarrollo con IA.</li>
+                                <li><span class="font-bold text-[#422680]">2. Plataformas Seguras:</span> Emplea solo las plataformas de IA aprobadas por Drivim, que garanticen el cumplimiento de GDPR y otras normativas de protección de datos.</li>
+                                <li><span class="font-bold text-[#422680]">3. No Datos Personales:</span> Bajo ninguna circunstancia introduzcas NOMBRES, DNI, direcciones, números de teléfono o datos financieros de clientes o empleados en prompts de IA no autorizadas.</li>
+                                <li><span class="font-bold text-[#422680]">4. Formación Continua:</span> Mantente actualizado sobre las políticas de seguridad de datos de Drivim y las mejores prácticas en el uso de IA.</li>
+                            </ul>
+                        </div>
+                    </details>
                 </div>
                 <div class="flex items-start space-x-4 p-4 flex-col">
                     <div class="flex-shrink-0 h-12 w-12 rounded-full bg-green-100 flex items-center justify-center text-2xl mb-2">⚖️</div>
@@ -358,13 +509,19 @@
                         <h3 class="text-lg font-semibold">Sé Consciente de los Sesgos</h3>
                         <p class="text-gray-600 mb-4">La IA aprende de los datos con los que es entrenada, y estos datos pueden contener sesgos sociales, culturales o históricos. Esto puede llevar a que la IA reproduzca o incluso amplifique prejuicios. <strong class="text-[#422680]">Revisa críticamente los resultados de la IA</strong> para asegurar que sean justos, equitativos y no discriminatorios. Busca la diversidad de perspectivas al evaluar sus outputs, especialmente en temas sensibles como contratación, marketing o atención al cliente.</p>
                     </div>
-                    <button class="btn-secondary font-bold py-2 px-4 rounded-md mt-auto w-full expand-ethical-btn" data-principle="Sé Consciente de los Sesgos">
-                        ✨ Obtener Consejos Prácticos
-                    </button>
-                    <div class="expanded-ethical-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap hidden w-full">
-                        <div class="spinner mx-auto hidden"></div>
-                        <span class="content-text"></span>
-                    </div>
+                    <details>
+                        <summary class="btn-secondary font-bold py-2 px-4 rounded-md w-full text-center">
+                            ✨ Obtener Consejos Prácticos
+                        </summary>
+                        <div class="details-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap">
+                            <ul class="list-disc list-inside mt-2 space-y-1">
+                                <li><span class="font-bold text-[#422680]">1. Diversifica Inputs:</span> Si la IA te pide ejemplos, intenta proporcionar ejemplos variados que no refuercen estereotipos.</li>
+                                <li><span class="font-bold text-[#422680]">2. Revisa Resultados:</span> Evalúa críticamente los outputs de la IA, especialmente si tratan con personas (descripciones de clientes, ofertas de empleo), para identificar y corregir posibles sesgos.</li>
+                                <li><span class="font-bold text-[#422680]">3. Busca Perspectivas:</span> Si la IA genera contenido, pide opiniones a compañeros con diferentes perspectivas para detectar sesgos que podrías haber pasado por alto.</li>
+                                <li><span class="font-bold text-[#422680]">4. Evita Generalizaciones:</span> No uses las respuestas de la IA para hacer generalizaciones sobre grupos de personas basadas en datos limitados o sesgados.</li>
+                            </ul>
+                        </div>
+                    </details>
                 </div>
                 <div class="flex items-start space-x-4 p-4 flex-col">
                     <div class="flex-shrink-0 h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center text-2xl mb-2">🙋</div>
@@ -372,13 +529,19 @@
                         <h3 class="text-lg font-semibold">Supervisión Humana</h3>
                         <p class="text-gray-600 mb-4">La IA es una herramienta de apoyo, no un sustituto de la inteligencia humana. Tu juicio, experiencia y supervisión son <strong class="text-[#422680]">esenciales para garantizar la calidad, el tono y la adecuación cultural</strong> de cualquier contenido o decisión asistida por IA. Mantén siempre un control final sobre los resultados y asegúrate de que se alineen con los valores y objetivos de Drivim. La responsabilidad última siempre recae en el ser humano.</p>
                     </div>
-                    <button class="btn-secondary font-bold py-2 px-4 rounded-md mt-auto w-full expand-ethical-btn" data-principle="Supervisión Humana">
-                        ✨ Obtener Consejos Prácticos
-                    </button>
-                    <div class="expanded-ethical-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap hidden w-full">
-                        <div class="spinner mx-auto hidden"></div>
-                        <span class="content-text"></span>
-                    </div>
+                    <details>
+                        <summary class="btn-secondary font-bold py-2 px-4 rounded-md w-full text-center">
+                            ✨ Obtener Consejos Prácticos
+                        </summary>
+                        <div class="details-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap">
+                            <ul class="list-disc list-inside mt-2 space-y-1">
+                                <li><span class="font-bold text-[#422680]">1. Rol de Asistente:</span> Considera a la IA como un asistente muy capaz, pero no como un tomador de decisiones final. Tu rol es supervisar y validar.</li>
+                                <li><span class="font-bold text-[#422680]">2. Control de Calidad:</span> Antes de publicar o implementar cualquier contenido o decisión basada en IA, realiza una revisión exhaustiva para asegurar que cumple con los estándares de Drivim.</li>
+                                <li><span class="font-bold text-[#422680]">3. Tono y Marca:</span> Asegúrate de que el tono y el estilo de la IA se alineen con la voz de la marca Drivim y los valores de la empresa.</li>
+                                <li><span class="font-bold text-[#422680]">4. Responsabilidad Final:</span> Recuerda que la responsabilidad última de cualquier acción o contenido generado con IA recae en el usuario humano.</li>
+                            </ul>
+                        </div>
+                    </details>
                 </div>
                 <div class="flex items-start space-x-4 p-4 flex-col">
                     <div class="flex-shrink-0 h-12 w-12 rounded-full bg-orange-100 flex items-center justify-center text-2xl mb-2">©️</div>
@@ -386,13 +549,19 @@
                         <h3 class="text-lg font-semibold">Propiedad Intelectual y Contenido Generado</h3>
                         <p class="text-gray-600 mb-4">Sé consciente de que el contenido generado por IA podría tener implicaciones de derechos de autor o propiedad intelectual. <strong class="text-[#422680]">No asumas que eres el propietario exclusivo de todo el contenido generado</strong>, especialmente si se basa en datos de entrenamiento extensos. Revisa las políticas de uso de cada herramienta de IA y asegúrate de que el contenido sea original y no infrinja derechos de terceros antes de su publicación o uso comercial.</p>
                     </div>
-                    <button class="btn-secondary font-bold py-2 px-4 rounded-md mt-auto w-full expand-ethical-btn" data-principle="Propiedad Intelectual y Contenido Generado">
-                        ✨ Obtener Consejos Prácticos
-                    </button>
-                    <div class="expanded-ethical-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap hidden w-full">
-                        <div class="spinner mx-auto hidden"></div>
-                        <span class="content-text"></span>
-                    </div>
+                    <details>
+                        <summary class="btn-secondary font-bold py-2 px-4 rounded-md w-full text-center">
+                            ✨ Obtener Consejos Prácticos
+                        </summary>
+                        <div class="details-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap">
+                            <ul class="list-disc list-inside mt-2 space-y-1">
+                                <li><span class="font-bold text-[#422680]">1. Revisa Términos de Servicio:</span> Antes de usar cualquier herramienta de IA, lee detenidamente sus términos de servicio para entender las implicaciones de propiedad intelectual del contenido generado.</li>
+                                <li><span class="font-bold text-[#422680]">2. Contenido Original:</span> Si el contenido es para publicación externa o uso comercial, asegúrate de que sea suficientemente original y no se base demasiado en material preexistente que pueda generar problemas de derechos de autor.</li>
+                                <li><span class="font-bold text-[#422680]">3. Atribución:</span> Si es necesario, atribuye el contenido a la IA o a la herramienta utilizada, según las políticas de la empresa y los términos de la herramienta.</li>
+                                <li><span class="font-bold text-[#422680]">4. Consulta Legal:</span> En caso de duda sobre la propiedad intelectual de un contenido crítico, consulta con el departamento legal de Drivim.</li>
+                            </ul>
+                        </div>
+                    </details>
                 </div>
                 <div class="flex items-start space-x-4 p-4 flex-col">
                     <div class="flex-shrink-0 h-12 w-12 rounded-full bg-gray-100 flex items-center justify-center text-2xl mb-2">🧑‍💻</div>
@@ -400,13 +569,19 @@
                         <h3 class="text-lg font-semibold">Impacto en el Empleo y Desarrollo Profesional</h3>
                         <p class="text-gray-600 mb-4">La IA transformará roles, no los eliminará por completo. En Drivim, <strong class="text-[#422680]">fomentamos la adaptación y el aprendizaje continuo</strong> para trabajar *con* la IA, no *contra* ella. Utiliza la IA para automatizar tareas repetitivas y liberar tiempo para actividades de mayor valor que requieran creatividad, pensamiento crítico y empatía humana. Considera cómo la IA puede potenciar tus habilidades y abrir nuevas oportunidades profesionales.</p>
                     </div>
-                    <button class="btn-secondary font-bold py-2 px-4 rounded-md mt-auto w-full expand-ethical-btn" data-principle="Impacto en el Empleo y Desarrollo Profesional">
-                        ✨ Obtener Consejos Prácticos
-                    </button>
-                    <div class="expanded-ethical-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap hidden w-full">
-                        <div class="spinner mx-auto hidden"></div>
-                        <span class="content-text"></span>
-                    </div>
+                    <details>
+                        <summary class="btn-secondary font-bold py-2 px-4 rounded-md w-full text-center">
+                            ✨ Obtener Consejos Prácticos
+                        </summary>
+                        <div class="details-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap">
+                            <ul class="list-disc list-inside mt-2 space-y-1">
+                                <li><span class="font-bold text-[#422680]">1. Formación Continua:</span> Participa activamente en formaciones sobre IA y nuevas tecnologías para adaptar tus habilidades.</li>
+                                <li><span class="font-bold text-[#422680]">2. Enfócate en Valor Añadido:</span> Utiliza la IA para automatizar tareas rutinarias y liberar tiempo para actividades que requieren creatividad, pensamiento crítico, estrategia y habilidades interpersonales.</li>
+                                <li><span class="font-bold text-[#422680]">3. Colabora con la IA:</span> Aprende a trabajar *con* la IA como una herramienta colaborativa que potencia tu productividad y te permite abordar proyectos más complejos.</li>
+                                <li><span class="font-bold text-[#422680]">4. Identifica Nuevas Oportunidades:</span> Mantente abierto a cómo la IA puede transformar tu rol y crear nuevas oportunidades profesionales dentro de Drivim.</li>
+                            </ul>
+                        </div>
+                    </details>
                 </div>
             </div>
         </section>
@@ -698,7 +873,7 @@
                 <details>
                     <summary>¿Qué es el Fine-tuning (Ajuste Fino)?</summary>
                     <div class="details-content">
-                        <p>El Fine-tuning (o Ajuste Fino) es un proceso en el que se toma un modelo de IA pre-entrenado (como un LLM generalista) y se entrena adicionalmente con un conjunto de datos más pequeño y específico para una tarea o dominio particular. Esto permite que el modelo se adapte mejor al vocabulario, estilo y necesidades específicas de una empresa como Drivim, mejorando la calidad de sus respuestas en contextos empresariales.</p>
+                        <p>El Fine-tuning (o Ajuste Fino) es un proceso en el que se toma un modelo de IA pre-entrenado (como un LLM generalista) y se entrena adicionalmente con un conjunto de datos más pequeño y específico para una tarea o dominio particular, como el vocabulario y estilo de Drivim. Esto permite que el modelo se adapte mejor al vocabulario, estilo y necesidades específicas de una empresa como Drivim, mejorando la calidad de sus respuestas en contextos empresariales.</p>
                     </div>
                 </details>
                 <details>
@@ -721,6 +896,42 @@
                 </details>
             </div>
         </section>
+
+        <section id="cuestionario" class="py-16 bg-gray-50 rounded-xl">
+            <div class="text-center">
+                <h2 class="section-title">Cuestionario de Conocimientos 👩‍🏫</h2>
+                <p class="section-subtitle">
+                    Pon a prueba tus conocimientos sobre la Superguía de IA para Drivim.
+                    ¡Demuestra lo que has aprendido!
+                </p>
+            </div>
+            <div class="max-w-3xl mx-auto p-6 card">
+                <div id="quiz-container">
+                    <div class="text-lg font-bold mb-4 text-[#422680]" id="question-counter"></div>
+                    <h3 class="text-xl font-semibold mb-6" id="quiz-question"></h3>
+                    <div id="quiz-options" class="space-y-4">
+                        <!-- Options will be loaded here by JS -->
+                    </div>
+                    <div id="quiz-feedback" class="quiz-feedback mt-4 hidden"></div>
+                    <div class="flex justify-between mt-6">
+                        <button id="prev-question-btn" class="btn-secondary font-bold py-2 px-4 rounded-md">Anterior</button>
+                        <button id="next-question-btn" class="btn-primary font-bold py-2 px-4 rounded-md">Siguiente</button>
+                    </div>
+                </div>
+                <div id="quiz-results" class="text-center mt-8 hidden">
+                    <h3 class="text-2xl font-bold mb-4 text-[#422680]">🏆⭐ ¡Cuestionario Completado! ⭐🏆</h3>
+                    <p class="text-lg mb-4">Tu puntuación final es: <span id="final-score" class="font-bold text-3xl"></span> / <span id="total-questions" class="font-bold text-3xl"></span></p>
+                    <div id="quiz-details-summary" class="text-left mt-6 p-4 bg-gray-100 rounded-md">
+                        <h4 class="font-bold text-xl text-[#422680] mb-3">Revisión de Respuestas:</h4>
+                        <!-- Detailed results will be loaded here -->
+                    </div>
+                    <button id="restart-quiz-btn" class="btn-primary font-bold py-2 px-6 rounded-md mt-6">
+                        Reiniciar Cuestionario
+                    </button>
+                </div>
+            </div>
+        </section>
+
 
         <section id="ask-ai" class="py-16 bg-blue-50 rounded-xl">
             <div class="text-center">
@@ -762,29 +973,313 @@
 
             // Data for Use Cases
             const useCases = [
-                { category: 'marketing', title: 'Ideas para Redes Sociales', description: 'Generar 5 ideas para posts de Instagram sobre el nuevo modelo eléctrico, enfocados en sostenibilidad y rendimiento.', icon: '📣' },
-                { category: 'marketing', title: 'Redacción de Blog', description: 'Escribir un borrador de 300 palabras para un post de blog titulado "5 Ventajas de la Conducción Híbrida".', icon: '📣' },
-                { category: 'marketing', title: 'Responder Reseña Positiva', description: 'Redactar una respuesta amable y personalizada a una reseña positiva de un cliente sobre su experiencia en Drivim.', icon: '👍' },
-                { category: 'marketing', title: 'Responder Reseña Negativa', description: 'Redactar una respuesta profesional y empática a una reseña negativa, ofreciendo una solución o contacto para resolver el problema.', icon: '👎' },
-                { category: 'marketing', title: 'Crear Contenido para Anuncios Digitales', description: 'Generar textos persuasivos y creativos para anuncios de Google Ads o redes sociales, destacando ofertas o modelos específicos.', icon: '✍️' },
-                { category: 'marketing', title: 'Extraer Información Clave de Documentos de Marca', description: 'Analizar un documento extenso (ej. guía de marca, informe de campaña) y extraer los puntos clave, mensajes principales y acciones recomendadas en un resumen detallado.', icon: '📄' },
+                {
+                    category: 'marketing',
+                    title: 'Ideas para Redes Sociales',
+                    description: 'Generar 5 ideas para posts de Instagram sobre el nuevo modelo eléctrico, enfocados en sostenibilidad y rendimiento.',
+                    icon: '📣',
+                    examplePrompts: [
+                        {
+                            title: "Prompt 1: Borrador de Post para Instagram",
+                            content: "Actúa como un <span class='font-bold text-[#00cade]'>experto en marketing digital de Drivim</span>. Genera 3 ideas para un post de Instagram sobre el <span class='font-bold text-[#422680]'>nuevo modelo eléctrico Drivim Volt</span>. Cada idea debe incluir un <span class='font-bold text-[#422680]'>título atractivo, 3-4 puntos clave</span> sobre sostenibilidad y rendimiento, y un <span class='font-bold text-[#422680]'>llamado a la acción</span> claro para visitar nuestra web. El tono debe ser <span class='font-bold text-[#422680]'>entusiasta y moderno</span>."
+                        },
+                        {
+                            title: "Prompt 2: Campaña de Lanzamiento en Stories",
+                            content: "Como <span class='font-bold text-[#00cade]'>estratega de lanzamiento de producto</span> para Drivim, propón una <span class='font-bold text-[#422680]'>mini-campaña de 3 días en Instagram Stories</span> para el Drivim Volt. Incluye ideas para cada día (ej. teaser, revelación de característica, CTA) y el tipo de contenido visual. El objetivo es generar expectación antes del lanzamiento oficial."
+                        }
+                    ]
+                },
+                {
+                    category: 'marketing',
+                    title: 'Redacción de Blog',
+                    description: 'Escribir un borrador de 300 palabras para un post de blog titulado "5 Ventajas de la Conducción Híbrida".',
+                    icon: '📣',
+                    examplePrompts: [
+                        {
+                            title: "Prompt 1: Borrador de Artículo",
+                            content: "Actúa como un <span class='font-bold text-[#00cade]'>redactor de contenido automotriz para Drivim</span>. Escribe un borrador de <span class='font-bold text-[#422680]'>300 palabras</span> para un post de blog titulado '<span class='font-bold text-[#422680]'>5 Ventajas de la Conducción Híbrida</span>'. Incluye puntos sobre ahorro de combustible, reducción de emisiones, y suavidad en la conducción. El tono debe ser <span class='font-bold text-[#422680]'>informativo y persuasivo</span>."
+                        },
+                        {
+                            title: "Prompt 2: Optimización SEO de Artículo",
+                            content: "Revisa el siguiente borrador de blog sobre coches híbridos [pegar borrador]. Actúa como un <span class='font-bold text-[#00cade]'>especialista SEO</span>. Sugiere 3-5 <span class='font-bold text-[#422680]'>palabras clave secundarias</span> y dónde integrarlas naturalmente, así como una <span class='font-bold text-[#422680]'>meta descripción</span> de 150 caracteres."
+                        }
+                    ]
+                },
+                {
+                    category: 'marketing',
+                    title: 'Responder Reseña Positiva',
+                    description: 'Redactar una respuesta amable y personalizada a una reseña positiva de un cliente sobre su experiencia en Drivim.',
+                    icon: '👍',
+                    examplePrompts: [
+                        {
+                            title: "Prompt 1: Respuesta Amable y Personalizada",
+                            content: "Actúa como un <span class='font-bold text-[#00cade]'>especialista en atención al cliente de Drivim</span>. Redacta una respuesta amable y personalizada a la siguiente reseña positiva de un cliente: '<span class='font-bold text-[#422680]'>¡Excelente servicio en Drivim! Mi nuevo coche es una maravilla.</span>'. Menciona su satisfacción y la importancia de su opinión."
+                        },
+                        {
+                            title: "Prompt 2: Respuesta con Incentivo",
+                            content: "Actúa como un <span class='font-bold text-[#00cade]'>responsable de marketing de Drivim</span>. Redacta una respuesta a la siguiente reseña positiva: '<span class='font-bold text-[#422680]'>Muy contento con mi compra y el trato recibido.</span>'. Agradece, refuerza la calidad del servicio y sugiere un pequeño incentivo para futuras interacciones (ej. 'esperamos verte pronto para tu revisión')."
+                        }
+                    ]
+                },
+                {
+                    category: 'marketing',
+                    title: 'Responder Reseña Negativa',
+                    description: 'Redactar una respuesta profesional y empática a una reseña negativa, ofreciendo una solución o contacto para resolver el problema.',
+                    icon: '👎',
+                    examplePrompts: [
+                        {
+                            title: "Prompt 1: Respuesta Empática y Solución",
+                            content: "Actúa como un <span class='font-bold text-[#00cade]'>especialista en atención al cliente de Drivim</span>. Redacta una respuesta profesional y empática a la siguiente reseña negativa: '<span class='font-bold text-[#422680]'>Tuve un problema con la entrega, muy decepcionado.</span>'. Pide disculpas, muestra comprensión y ofrece un canal directo para resolver el problema (ej. un número de contacto o correo)."
+                        },
+                        {
+                            title: "Prompt 2: Respuesta con Disculpa y Contacto",
+                            content: "Como <span class='font-bold text-[#00cade]'>gerente de reputación online de Drivim</span>, redacta una respuesta concisa y resolutiva a esta reseña: '<span class='font-bold text-[#422680]'>El coche llegó con un arañazo y nadie me da solución.</span>'. Expresa tu pesar, valida su frustración y proporciona un correo electrónico o teléfono directo para que el cliente pueda ser contactado y se le ofrezca una solución personalizada."
+                        }
+                    ]
+                },
+                {
+                    category: 'marketing',
+                    title: 'Crear Contenido para Anuncios Digitales',
+                    description: 'Generar textos persuasivos y creativos para anuncios de Google Ads o redes sociales, destacando ofertas o modelos específicos.',
+                    icon: '✍️',
+                    examplePrompts: [
+                        {
+                            title: "Prompt 1: Textos para Google Ads",
+                            content: "Actúa como un <span class='font-bold text-[#00cade]'>copywriter de marketing digital para Drivim</span>. Genera 3 titulares (máx. 30 caracteres) y 2 descripciones (máx. 90 caracteres) para un anuncio de Google Ads sobre la <span class='font-bold text-[#422680]'>oferta especial del Drivim Urban (coche urbano)</span>. Enfoque: 'ideal para la ciudad' y 'bajo consumo'."
+                        },
+                        {
+                            title: "Prompt 2: Textos para Anuncio de Facebook",
+                            content: "Como <span class='font-bold text-[#00cade]'>creador de contenido para Facebook Ads de Drivim</span>, redacta 2-3 opciones de texto persuasivo para un anuncio de Facebook sobre el <span class='font-bold text-[#422680]'>lanzamiento del Drivim Sport</span>. Incluye un llamado a la acción claro y enfócate en la 'emoción de conducir' y el 'diseño innovador'."
+                        }
+                    ]
+                },
+                {
+                    category: 'marketing',
+                    title: 'Extraer Información Clave de Documentos de Marca',
+                    description: 'Analizar un documento extenso (ej. guía de marca, informe de campaña) y extraer los puntos clave, mensajes principales y acciones recomendadas en un resumen detallado.',
+                    icon: '📄',
+                    examplePrompts: [
+                        {
+                            title: "Prompt 1: Resumen Ejecutivo de Documento",
+                            content: "Actúa como un <span class='font-bold text-[#00cade]'>analista de marketing de Drivim</span>. Lee el siguiente 'Informe de Campaña Q2 2024' [pegar texto del informe]. Extrae los <span class='font-bold text-[#422680]'>3 puntos clave de rendimiento</span>, las <span class='font-bold text-[#422680]'>principales conclusiones</span> y las <span class='font-bold text-[#422680]'>2 acciones recomendadas</span> para el próximo trimestre. Presenta la información de forma concisa."
+                        },
+                        {
+                            title: "Prompt 2: Puntos Clave para Presentación",
+                            content: "Como <span class='font-bold text-[#00cade]'>asistente de comunicaciones de Drivim</span>, necesito que sintetices la 'Guía de Estilo de Marca 2025' [pegar texto de la guía]. Extrae los <span class='font-bold text-[#422680]'>5 puntos más importantes</span> que todo empleado debe conocer sobre el uso de la marca en comunicaciones externas. Presenta los puntos en una lista clara."
+                        }
+                    ]
+                },
 
-                { category: 'ventas', title: 'Argumentario de Venta', description: 'Crear un argumentario de venta para el nuevo SUV, destacando 3 características clave para familias.', icon: '🤝' },
-                { category: 'ventas', title: 'Plantilla de Correo', description: 'Redactar una plantilla de correo de seguimiento para un cliente que ha probado un coche, preguntando por su experiencia.', icon: '🤝' },
-                { category: 'ventas', title: 'Preparar Respuestas a Objeciones Comunes', description: 'Desarrollar argumentos y respuestas efectivas para las objeciones más frecuentes de los clientes durante el proceso de venta de vehículos.', icon: '💬' },
-                { category: 'ventas', title: 'Consultar Chatbot de Ventas (Cliente)', description: 'Realizar una consulta al chatbot de ventas sobre el historial de interacción, preferencias o estado actual de un cliente específico para preparar una llamada o reunión.', icon: '👤' },
-                { category: 'ventas', title: 'Consultar Chatbot de Ventas (Empresa)', description: 'Realizar una consulta al chatbot de ventas sobre información relevante de una empresa (ej. tamaño, sector, necesidades) para una propuesta comercial.', icon: '🏢' },
+                {
+                    category: 'ventas',
+                    title: 'Argumentario de Venta',
+                    description: 'Crear un argumentario de venta para el nuevo SUV, destacando 3 características clave para familias.',
+                    icon: '🤝',
+                    examplePrompts: [
+                        {
+                            title: "Prompt 1: Argumentario para SUV Familiar",
+                            content: "Actúa como un <span class='font-bold text-[#00cade]'>asesor de ventas de Drivim</span>. Desarrolla un argumentario de venta para el <span class='font-bold text-[#422680]'>nuevo SUV familiar Drivim Explorer</span>. Destaca 3 características clave: <span class='font-bold text-[#422680]'>seguridad avanzada, amplio espacio interior y eficiencia de combustible</span>. Enfócate en los beneficios para una familia con niños."
+                        },
+                        {
+                            title: "Prompt 2: Argumentario para Cliente con Presupuesto Limitado",
+                            content: "Como <span class='font-bold text-[#00cade]'>vendedor experto en Drivim</span>, crea un argumentario para un cliente que expresa tener un <span class='font-bold text-[#422680]'>presupuesto limitado</span>. Enfócate en el <span class='font-bold text-[#422680]'>valor a largo plazo</span>, opciones de financiación flexibles y los <span class='font-bold text-[#422680]'>costes de mantenimiento reducidos</span> de nuestros modelos más económicos."
+                        }
+                    ]
+                },
+                {
+                    category: 'ventas',
+                    title: 'Plantilla de Correo',
+                    description: 'Redactar una plantilla de correo de seguimiento para un cliente que ha probado un coche, preguntando por su experiencia.',
+                    icon: '🤝',
+                    examplePrompts: [
+                        {
+                            title: "Prompt 1: Correo de Seguimiento Post-Prueba",
+                            content: "Actúa como un <span class='font-bold text-[#00cade]'>asesor comercial de Drivim</span>. Redacta una plantilla de correo de seguimiento para un cliente que <span class='font-bold text-[#422680]'>realizó una prueba de conducción del modelo X</span>. Pregúntale por su experiencia, ofrece resolver dudas y sugiere un próximo paso (ej. una cita para configurar el vehículo)."
+                        },
+                        {
+                            title: "Prompt 2: Correo de Oferta Personalizada",
+                            content: "Como <span class='font-bold text-[#00cade]'>representante de ventas de Drivim</span>, crea una plantilla de correo para enviar una <span class='font-bold text-[#422680]'>oferta personalizada del Drivim Compact</span>. Incluye un saludo, los detalles de la oferta, los beneficios clave del modelo y un llamado a la acción para contactar o visitar la sucursal."
+                        }
+                    ]
+                },
+                {
+                    category: 'ventas',
+                    title: 'Preparar Respuestas a Objeciones Comunes',
+                    description: 'Desarrollar argumentos y respuestas efectivas para las objeciones más frecuentes de los clientes durante el proceso de venta de vehículos.',
+                    icon: '💬',
+                    examplePrompts: [
+                        {
+                            title: "Prompt 1: Objeción: 'Es demasiado caro'",
+                            content: "Actúa como un <span class='font-bold text-[#00cade]'>vendedor de Drivim</span>. Proporciona 2-3 argumentos concisos para responder a la objeción común: '<span class='font-bold text-[#422680]'>El precio es demasiado alto.</span>'. Enfócate en el valor, la calidad, la financiación y el ahorro a largo plazo."
+                        },
+                        {
+                            title: "Prompt 2: Objeción: 'Necesito pensarlo'",
+                            content: "Como <span class='font-bold text-[#00cade]'>experto en cierre de ventas para Drivim</span>, genera 2-3 frases o preguntas clave para responder a la objeción: '<span class='font-bold text-[#422680]'>Necesito pensarlo un poco más.</span>'. El objetivo es mantener la conversación abierta y entender las dudas del cliente."
+                        }
+                    ]
+                },
+                {
+                    category: 'ventas',
+                    title: 'Consultar Chatbot de Ventas (Cliente)',
+                    description: 'Realizar una consulta al chatbot de ventas sobre el historial de interacción, preferencias o estado actual de un cliente específico para preparar una llamada o reunión.',
+                    icon: '👤',
+                    examplePrompts: [
+                        {
+                            title: "Prompt 1: Historial de Interacción de Cliente",
+                            content: "Actúa como un <span class='font-bold text-[#00cade]'>asesor de ventas de Drivim</span>. Pregunta al chatbot: '<span class='font-bold text-[#422680]'>¿Cuál es el historial de interacciones con el cliente [Nombre Cliente]?</span>'. Necesito saber qué modelos ha consultado, si ha hecho pruebas, y si tiene ofertas pendientes."
+                        },
+                        {
+                            title: "Prompt 2: Preferencias de Modelo de Cliente",
+                            content: "Como <span class='font-bold text-[#00cade]'>vendedor de Drivim</span>, pregunta al chatbot: '<span class='font-bold text-[#422680]'>¿Qué tipo de vehículos prefiere [Nombre Cliente] basándose en sus búsquedas y consultas previas?</span>'. Necesito esta información para una recomendación personalizada."
+                        }
+                    ]
+                },
+                {
+                    category: 'ventas',
+                    title: 'Consultar Chatbot de Ventas (Empresa)',
+                    description: 'Realizar una consulta al chatbot de ventas sobre información relevante de una empresa (ej. tamaño, sector, necesidades) para una propuesta comercial.',
+                    icon: '🏢',
+                    examplePrompts: [
+                        {
+                            title: "Prompt 1: Información General de Empresa",
+                            content: "Actúa como un <span class='font-bold text-[#00cade]'>ejecutivo de cuentas de Drivim</span>. Pregunta al chatbot: '<span class='font-bold text-[#422680]'>¿Qué información tenemos sobre la empresa [Nombre Empresa]?</span>'. Necesito conocer su sector, tamaño aproximado y si han mostrado interés en flotas."
+                        },
+                        {
+                            title: "Prompt 2: Necesidades de Flota para Empresa",
+                            content: "Como <span class='font-bold text-[#00cade]'>especialista en ventas a empresas de Drivim</span>, pregunta al chatbot: '<span class='font-bold text-[#422680]'>¿Cuáles son las necesidades de flota estimadas para [Nombre Empresa] basándose en datos de mercado y su actividad?</span>'. Necesito preparar una propuesta de vehículos industriales."
+                        }
+                    ]
+                },
 
+                {
+                    category: 'operaciones',
+                    title: 'Resumen de Reunión',
+                    description: 'Resumir los puntos clave y las acciones a seguir de una transcripción de reunión de equipo.',
+                    icon: '⚙️',
+                    examplePrompts: [
+                        {
+                            title: "Prompt 1: Resumen de Puntos Clave y Acciones",
+                            content: "Actúa como un <span class='font-bold text-[#00cade]'>asistente de operaciones de Drivim</span>. Resume la siguiente transcripción de reunión [pegar transcripción]. Extrae los <span class='font-bold text-[#422680]'>puntos clave discutidos</span> y una <span class='font-bold text-[#422680]'>lista de acciones a seguir</span> con sus responsables si se mencionan."
+                        },
+                        {
+                            title: "Prompt 2: Resumen Enfocado en Decisiones",
+                            content: "Como <span class='font-bold text-[#00cade]'>analista de procesos de Drivim</span>, necesito que resumas esta transcripción de reunión [pegar transcripción]. Enfócate exclusivamente en las <span class='font-bold text-[#422680]'>decisiones tomadas</span> y los <span class='font-bold text-[#422680]'>próximos pasos inmediatos</span>. Presenta la información de forma concisa."
+                        }
+                    ]
+                },
+                {
+                    category: 'operaciones',
+                    title: 'Correo Interno',
+                    description: 'Redactar un comunicado interno sobre la nueva política de teletrabajo, con un tono claro y conciso.',
+                    icon: '⚙️',
+                    examplePrompts: [
+                        {
+                            title: "Prompt 1: Comunicación de Nueva Política",
+                            content: "Actúa como un <span class='font-bold text-[#00cade]'>responsable de comunicación interna de Drivim</span>. Redacta un correo electrónico para anunciar la <span class='font-bold text-[#422680]'>nueva política de teletrabajo</span>. El tono debe ser <span class='font-bold text-[#422680]'>claro, conciso y positivo</span>. Incluye los puntos clave de la política y dónde pueden encontrar más detalles."
+                        },
+                        {
+                            title: "Prompt 2: Anuncio de Mantenimiento Programado",
+                            content: "Como <span class='font-bold text-[#00cade]'>coordinador de IT en Drivim</span>, redacta un correo interno para informar sobre un <span class='font-bold text-[#422680]'>mantenimiento programado del sistema de inventario</span>. Indica la fecha, hora de inicio y fin, el impacto esperado y un contacto para emergencias. El tono debe ser <span class='font-bold text-[#422680]'>informativo y proactivo</span>."
+                        }
+                    ]
+                },
+                {
+                    category: 'operaciones',
+                    title: 'Consultar Stock de Modelo',
+                    description: 'Obtener información precisa sobre el stock disponible de un modelo de vehículo específico, incluyendo variantes y ubicaciones.',
+                    icon: '📦',
+                    examplePrompts: [
+                        {
+                            title: "Prompt 1: Stock Detallado por Variante",
+                            content: "Actúa como un <span class='font-bold text-[#00cade]'>gestor de inventario de Drivim</span>. Consulta el sistema: '<span class='font-bold text-[#422680]'>¿Cuál es el stock actual del Drivim City en todas sus variantes (motor, color, acabado) y en qué ubicaciones (sucursales)?</span>'. Presenta la información en formato de tabla."
+                        },
+                        {
+                            title: "Prompt 2: Disponibilidad en Diferentes Sucursales",
+                            content: "Como <span class='font-bold text-[#00cade]'>asistente de logística de Drivim</span>, pregunta al sistema: '<span class='font-bold text-[#422680]'>Necesito saber la disponibilidad del Drivim SUV Pro en las sucursales de Madrid, Barcelona y Valencia para entrega inmediata.</span>'. Indica si hay unidades y cuántas en cada una."
+                        }
+                    ]
+                },
+                {
+                    category: 'operaciones',
+                    title: 'Consultar Características de Modelo',
+                    description: 'Detallar las características técnicas y principales ventajas de un modelo de vehículo en particular para un cliente interesado.',
+                    icon: '⚙️',
+                    examplePrompts: [
+                        {
+                            title: "Prompt 1: Ficha Técnica Simplificada",
+                            content: "Actúa como un <span class='font-bold text-[#00cade]'>especialista de producto de Drivim</span>. Proporciona una <span class='font-bold text-[#422680]'>ficha técnica simplificada del Drivim Van</span>, destacando sus 5 características más relevantes para un uso comercial (capacidad de carga, consumo, dimensiones)."
+                        },
+                        {
+                            title: "Prompt 2: Beneficios Clave para Cliente",
+                            content: "Como <span class='font-bold text-[#00cade]'>asesor de ventas de Drivim</span>, necesito que describas las <span class='font-bold text-[#422680]'>3 principales ventajas del Drivim Hybrid</span> para un cliente que valora el ahorro y el medio ambiente. Utiliza un lenguaje cercano y persuasivo."
+                        }
+                    ]
+                },
+                {
+                    category: 'operaciones',
+                    title: 'Extraer Datos de Documentos y Crear Tabla',
+                    description: 'Procesar un documento (ej. informe de ventas, lista de inventario) y extraer datos específicos para organizarlos en una tabla con columnas definidas (ej. Modelo, Cantidad, Precio).',
+                    icon: '📊',
+                    examplePrompts: [
+                        {
+                            title: "Prompt 1: Extraer Datos de Informe de Ventas a Tabla",
+                            content: "Actúa como un <span class='font-bold text-[#00cade]'>analista de datos de Drivim</span>. Lee el siguiente 'Informe de Ventas Mensual' [pegar texto del informe]. Extrae los datos de <span class='font-bold text-[#422680]'>Modelo de Vehículo, Cantidad Vendida y Precio Promedio</span>. Organízalos en una tabla con estas tres columnas."
+                        },
+                        {
+                            title: "Prompt 2: Organizar Inventario en Tabla",
+                            content: "Como <span class='font-bold text-[#00cade]'>gestor de almacén de Drivim</span>, procesa la siguiente 'Lista de Inventario' [pegar texto de la lista]. Extrae el <span class='font-bold text-[#422680]'>ID de Producto, Nombre del Artículo, Cantidad en Stock y Ubicación de Almacén</span>. Presenta la información en una tabla clara."
+                        }
+                    ]
+                },
 
-                { category: 'operaciones', title: 'Resumen de Reunión', description: 'Resumir los puntos clave y las acciones a seguir de una transcripción de reunión de equipo.', icon: '⚙️' },
-                { category: 'operaciones', title: 'Correo Interno', description: 'Redactar un comunicado interno sobre la nueva política de teletrabajo, con un tono claro y conciso.', icon: '⚙️' },
-                { category: 'operaciones', title: 'Consultar Stock de Modelo', description: 'Obtener información precisa sobre el stock disponible de un modelo de vehículo específico, incluyendo variantes y ubicaciones.', icon: '📦' },
-                { category: 'operaciones', title: 'Consultar Características de Modelo', description: 'Detallar las características técnicas y principales ventajas de un modelo de vehículo en particular para un cliente interesado.', icon: '⚙️' },
-                { category: 'operaciones', title: 'Extraer Datos de Documentos y Crear Tabla', description: 'Procesar un documento (ej. informe de ventas, lista de inventario) y extraer datos específicos para organizarlos en una tabla con columnas definidas (ej. Modelo, Cantidad, Precio).', icon: '📊' },
-
-                { category: 'rrhh', title: 'Descripción de Puesto', description: 'Crear una descripción de puesto para un "Asesor Comercial Junior", incluyendo responsabilidades y requisitos.', icon: '🧑‍🤝‍🧑' },
-                { category: 'rrhh', title: 'Preguntas para Entrevista', description: 'Generar 10 preguntas de entrevista conductual para un puesto de manager de equipo.', icon: '🧑‍🤝‍🧑' },
-                { category: 'rrhh', title: 'Generar Ideas para Programas de Formación', description: 'Proponer ideas innovadoras para programas de formación y desarrollo profesional para el equipo de Drivim, adaptados a las necesidades actuales del sector.', icon: '🎓' }
+                {
+                    category: 'rrhh',
+                    title: 'Descripción de Puesto',
+                    description: 'Crear una descripción de puesto para un "Asesor Comercial Junior", incluyendo responsabilidades y requisitos.',
+                    icon: '🧑‍🤝‍🧑',
+                    examplePrompts: [
+                        {
+                            title: "Prompt 1: Descripción de Puesto para Asesor Comercial",
+                            content: "Actúa como un <span class='font-bold text-[#00cade]'>especialista de RRHH en Drivim</span>. Redacta una descripción de puesto para un '<span class='font-bold text-[#422680]'>Asesor Comercial Junior</span>'. Incluye responsabilidades clave (atención al cliente, ventas, seguimiento), requisitos (experiencia, habilidades) y los beneficios de trabajar en Drivim."
+                        },
+                        {
+                            title: "Prompt 2: Descripción de Puesto para Técnico de Taller",
+                            content: "Como <span class='font-bold text-[#00cade]'>reclutador técnico de Drivim</span>, crea una descripción de puesto para un '<span class='font-bold text-[#422680]'>Técnico de Taller de Vehículos Eléctricos</span>'. Detalla las funciones (diagnóstico, mantenimiento, reparación), los requisitos técnicos y certificaciones necesarias, y el ambiente de trabajo."
+                        }
+                    ]
+                },
+                {
+                    category: 'rrhh',
+                    title: 'Preguntas para Entrevista',
+                    description: 'Generar 10 preguntas de entrevista conductual para un puesto de manager de equipo.',
+                    icon: '🧑‍🤝‍🧑',
+                    examplePrompts: [
+                        {
+                            title: "Prompt 1: Preguntas Conductuales para Liderazgo",
+                            content: "Actúa como un <span class='font-bold text-[#00cade]'>reclutador senior de Drivim</span>. Genera 5 preguntas de entrevista <span class='font-bold text-[#422680]'>conductuales</span> para evaluar las habilidades de <span class='font-bold text-[#422680]'>liderazgo y resolución de conflictos</span> en un candidato a 'Jefe de Equipo de Ventas'."
+                        },
+                        {
+                            title: "Prompt 2: Preguntas Técnicas para Puesto Específico",
+                            content: "Como <span class='font-bold text-[#00cade]'>especialista en selección de personal de Drivim</span>, crea 5 preguntas de entrevista <span class='font-bold text-[#422680]'>técnicas</span> para un puesto de 'Especialista en Diagnóstico Automotriz'. Las preguntas deben evaluar conocimientos sobre sistemas eléctricos, motores híbridos y herramientas de diagnóstico."
+                        }
+                    ]
+                },
+                {
+                    category: 'rrhh',
+                    title: 'Generar Ideas para Programas de Formación',
+                    description: 'Proponer ideas innovadoras para programas de formación y desarrollo profesional para el equipo de Drivim, adaptados a las necesidades actuales del sector.',
+                    icon: '🎓',
+                    examplePrompts: [
+                        {
+                            title: "Prompt 1: Ideas para Formación en Nuevas Tecnologías",
+                            content: "Actúa como un <span class='font-bold text-[#00cade]'>consultor de desarrollo de talento para Drivim</span>. Propón 3 ideas innovadoras para programas de formación enfocados en <span class='font-bold text-[#422680]'>nuevas tecnologías en el sector automotriz</span> (ej. vehículos eléctricos, IA en ventas, conducción autónoma). Incluye el objetivo y formato de cada programa."
+                        },
+                        {
+                            title: "Prompt 2: Ideas para Desarrollo de Habilidades Blandas",
+                            content: "Como <span class='font-bold text-[#00cade]'>experto en capacitación de RRHH de Drivim</span>, genera 3 ideas para programas de desarrollo de <span class='font-bold text-[#422680]'>habilidades blandas (soft skills)</span> para el equipo de ventas. Enfócate en la comunicación efectiva, la empatía con el cliente y la negociación. Describe brevemente el contenido de cada programa."
+                        }
+                    ]
+                }
             ];
 
             const useCasesGrid = document.getElementById('use-cases-grid');
@@ -826,44 +1321,33 @@
             function displayUseCases(filter) {
                 useCasesGrid.innerHTML = '';
                 const filteredCases = filter === 'all' ? useCases : useCases.filter(c => c.category === filter);
-                filteredCases.forEach((c, index) => {
+                filteredCases.forEach((c) => { // Removed index as it's not needed for API call anymore
                     const card = document.createElement('div');
                     card.className = 'card p-6 flex flex-col';
+                    let promptsHtml = '';
+                    c.examplePrompts.forEach(p => {
+                        promptsHtml += `
+                            <div class="mb-4">
+                                <p class="font-semibold text-[#422680] mb-2">${p.title}</p>
+                                <p class="text-sm text-gray-800 bg-gray-50 p-3 rounded-md border border-gray-200">${p.content}</p>
+                            </div>
+                        `;
+                    });
+
                     card.innerHTML = `
                         <div class="text-3xl mb-3">${c.icon}</div>
                         <h3 class="text-xl font-bold mb-2">${c.title}</h3>
                         <p class="text-gray-600 mb-4">${c.description}</p>
-                        <button class="btn-primary font-bold py-2 px-4 rounded-md mt-auto generate-prompt-btn" data-index="${index}">
-                            ✨ Generar Prompt Completo
-                        </button>
-                        <div class="generated-prompt-container mt-4 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap hidden">
-                            <div class="spinner mx-auto hidden"></div>
-                            <span class="prompt-content"></span>
-                        </div>
+                        <details class="mt-auto">
+                            <summary class="btn-primary font-bold py-2 px-4 rounded-md w-full text-center">
+                                ✨ Ver Ejemplos de Prompts
+                            </summary>
+                            <div class="details-content mt-3 p-3 bg-gray-100 rounded-md text-sm text-gray-800 whitespace-pre-wrap">
+                                ${promptsHtml}
+                            </div>
+                        </details>
                     `;
                     useCasesGrid.appendChild(card);
-                });
-
-                document.querySelectorAll('.generate-prompt-btn').forEach(button => {
-                    button.addEventListener('click', async (event) => {
-                        const index = event.target.dataset.index;
-                        const useCase = useCases[index];
-                        const promptContainer = event.target.nextElementSibling;
-                        const promptContentSpan = promptContainer.querySelector('.prompt-content');
-                        const spinner = promptContainer.querySelector('.spinner');
-
-                        promptContainer.classList.remove('hidden');
-                        promptContentSpan.textContent = '';
-                        spinner.classList.remove('hidden');
-                        event.target.disabled = true;
-
-                        const prompt = `Genera un prompt completo y optimizado para la siguiente tarea, asumiendo un rol adecuado y un contexto general de Drivim. La tarea es: "${useCase.title}". Descripción: "${useCase.description}". Incluye rol, contexto, tarea y formato/restricciones. Solo devuelve el prompt, sin explicaciones adicionales.`;
-                        const generatedText = await callGeminiAPI(prompt);
-
-                        spinner.classList.add('hidden');
-                        promptContentSpan.textContent = generatedText;
-                        event.target.disabled = false;
-                    });
                 });
             }
 
@@ -986,7 +1470,7 @@
                 optimizePromptButton.disabled = true;
                 clearPromptButton.disabled = true;
 
-                const response = await callGeminiAPI(promptToTest);
+                const response = await callGeminiAPI(fullPrompt);
 
                 aiResponseSpinner.classList.add('hidden');
                 aiResponseText.textContent = response;
@@ -997,58 +1481,75 @@
             });
 
 
-            // Expand Principle feature
-            document.querySelectorAll('.expand-principle-btn').forEach(button => {
-                button.addEventListener('click', async (event) => {
-                    const card = event.target.closest('.card');
-                    const principleTitle = card.querySelector('h3').textContent.replace(/^\d+\.\s*/, '').trim(); // Get principle title
-                    const expandedContentDiv = card.querySelector('.expanded-content');
-                    const contentTextSpan = expandedContentDiv.querySelector('.content-text');
-                    const spinner = expandedContentDiv.querySelector('.spinner');
+            // Removed the old expand-principle-btn logic as it's replaced by <details>
+            // document.querySelectorAll('.expand-principle-btn').forEach(button => { ... });
 
-                    if (expandedContentDiv.classList.contains('hidden') || contentTextSpan.textContent === '') {
-                        expandedContentDiv.classList.remove('hidden');
-                        contentTextSpan.textContent = '';
-                        spinner.classList.remove('hidden');
-                        event.target.disabled = true;
-
-                        const prompt = `Explica en detalle el principio de IA: "${principleTitle}" en el contexto de una empresa como Drivim, que se dedica a la venta de vehículos, y cómo aplicarlo para mejorar la eficiencia y la calidad de las interacciones con IA. Sé conciso pero informativo.`;
-                        const generatedText = await callGeminiAPI(prompt);
-
-                        spinner.classList.add('hidden');
-                        contentTextSpan.textContent = generatedText;
-                        event.target.disabled = false;
-                    } else {
-                        expandedContentDiv.classList.add('hidden');
-                        contentTextSpan.textContent = '';
-                    }
-                });
-            });
-
-            // Generate Ethical Practical Advice feature
+            // Ethical Practical Advice feature - NOW HARDCODED
             document.querySelectorAll('.expand-ethical-btn').forEach(button => {
                 button.addEventListener('click', async (event) => {
                     const card = event.target.closest('.flex-col');
                     const principleTitle = event.target.dataset.principle;
-                    const expandedContentDiv = card.querySelector('.expanded-ethical-content');
-                    const contentTextSpan = expandedContentDiv.querySelector('.content-text');
-                    const spinner = expandedContentDiv.querySelector('.spinner');
+                    const expandedContentDiv = card.querySelector('.details-content'); // Changed to details-content
+                    
+                    // Define hardcoded content for each principle
+                    const ethicalContent = {
+                        "Verifica Siempre la Información": `
+                            <ul class="list-disc list-inside mt-2 space-y-1">
+                                <li><span class="font-bold text-[#422680]">1. Cruza Fuentes:</span> Siempre compara la información generada por la IA con al menos dos fuentes fiables e independientes (bases de datos internas, informes oficiales, sitios web de fabricantes).</li>
+                                <li><span class="font-bold text-[#422680]">2. Cifras Críticas:</span> Para datos numéricos (ventas, stock, precios), verifica cada cifra manualmente. Un error aquí puede tener un gran impacto.</li>
+                                <li><span class="font-bold text-[#422680]">3. Juicio Humano:</span> Utiliza la IA para generar ideas o borradores, pero la decisión final y la validación de la información siempre deben recaer en un experto humano de Drivim.</li>
+                                <li><span class="font-bold text-[#422680]">4. Documenta la Verificación:</span> Si la información es crítica, deja constancia de cómo y cuándo fue verificada.</li>
+                            </ul>
+                        `,
+                        "Protege la Privacidad": `
+                            <ul class="list-disc list-inside mt-2 space-y-1">
+                                <li><span class="font-bold text-[#422680]">1. Datos Anonimizados:</span> Si es posible, utiliza datos anonimizados o ficticios para pruebas y desarrollo con IA.</li>
+                                <li><span class="font-bold text-[#422680]">2. Plataformas Seguras:</span> Emplea solo las plataformas de IA aprobadas por Drivim, que garanticen el cumplimiento de GDPR y otras normativas de protección de datos.</li>
+                                <li><span class="font-bold text-[#422680]">3. No Datos Personales:</span> Bajo ninguna circunstancia introduzcas NOMBRES, DNI, direcciones, números de teléfono o datos financieros de clientes o empleados en prompts de IA no autorizadas.</li>
+                                <li><span class="font-bold text-[#422680]">4. Formación Continua:</span> Mantente actualizado sobre las políticas de seguridad de datos de Drivim y las mejores prácticas en el uso de IA.</li>
+                            </ul>
+                        `,
+                        "Sé Consciente de los Sesgos": `
+                            <ul class="list-disc list-inside mt-2 space-y-1">
+                                <li><span class="font-bold text-[#422680]">1. Diversifica Inputs:</span> Si la IA te pide ejemplos, intenta proporcionar ejemplos variados que no refuercen estereotipos.</li>
+                                <li><span class="font-bold text-[#422680]">2. Revisa Resultados:</span> Evalúa críticamente los outputs de la IA, especialmente si tratan con personas (descripciones de clientes, ofertas de empleo), para identificar y corregir posibles sesgos.</li>
+                                <li><span class="font-bold text-[#422680]">3. Busca Perspectivas:</span> Si la IA genera contenido, pide opiniones a compañeros con diferentes perspectivas para detectar sesgos que podrías haber pasado por alto.</li>
+                                <li><span class="font-bold text-[#422680]">4. Evita Generalizaciones:</span> No uses las respuestas de la IA para hacer generalizaciones sobre grupos de personas basadas en datos limitados o sesgados.</li>
+                            </ul>
+                        `,
+                        "Supervisión Humana": `
+                            <ul class="list-disc list-inside mt-2 space-y-1">
+                                <li><span class="font-bold text-[#422680]">1. Rol de Asistente:</span> Considera a la IA como un asistente muy capaz, pero no como un tomador de decisiones final. Tu rol es supervisar y validar.</li>
+                                <li><span class="font-bold text-[#422680]">2. Control de Calidad:</span> Antes de publicar o implementar cualquier contenido o decisión basada en IA, realiza una revisión exhaustiva para asegurar que cumple con los estándares de Drivim.</li>
+                                <li><span class="font-bold text-[#422680]">3. Tono y Marca:</span> Asegúrate de que el tono y el estilo de la IA se alineen con la voz de la marca Drivim y los valores de la empresa.</li>
+                                <li><span class="font-bold text-[#422680]">4. Responsabilidad Final:</span> Recuerda que la responsabilidad última de cualquier acción o contenido generado con IA recae en el usuario humano.</li>
+                            </ul>
+                        `,
+                        "Propiedad Intelectual y Contenido Generado": `
+                            <ul class="list-disc list-inside mt-2 space-y-1">
+                                <li><span class="font-bold text-[#422680]">1. Revisa Términos de Servicio:</span> Antes de usar cualquier herramienta de IA, lee detenidamente sus términos de servicio para entender las implicaciones de propiedad intelectual del contenido generado.</li>
+                                <li><span class="font-bold text-[#422680]">2. Contenido Original:</span> Si el contenido es para publicación externa o uso comercial, asegúrate de que sea suficientemente original y no se base demasiado en material preexistente que pueda generar problemas de derechos de autor.</li>
+                                <li><span class="font-bold text-[#422680]">3. Atribución:</span> Si es necesario, atribuye el contenido a la IA o a la herramienta utilizada, según las políticas de la empresa y los términos de la herramienta.</li>
+                                <li><span class="font-bold text-[#422680]">4. Consulta Legal:</span> En caso de duda sobre la propiedad intelectual de un contenido crítico, consulta con el departamento legal de Drivim.</li>
+                            </ul>
+                        `,
+                        "Impacto en el Empleo y Desarrollo Profesional": `
+                            <ul class="list-disc list-inside mt-2 space-y-1">
+                                <li><span class="font-bold text-[#422680]">1. Formación Continua:</span> Participa activamente en formaciones sobre IA y nuevas tecnologías para adaptar tus habilidades.</li>
+                                <li><span class="font-bold text-[#422680]">2. Enfócate en Valor Añadido:</span> Utiliza la IA para automatizar tareas rutinarias y liberar tiempo para actividades que requieren creatividad, pensamiento crítico, estrategia y habilidades interpersonales.</li>
+                                <li><span class="font-bold text-[#422680]">3. Colabora con la IA:</span> Aprende a trabajar *con* la IA como una herramienta colaborativa que potencia tu productividad y te permite abordar proyectos más complejos.</li>
+                                <li><span class="font-bold text-[#422680]">4. Identifica Nuevas Oportunidades:</span> Mantente abierto a cómo la IA puede transformar tu rol y crear nuevas oportunidades profesionales dentro de Drivim.</li>
+                            </ul>
+                        `
+                    };
 
-                    if (expandedContentDiv.classList.contains('hidden') || contentTextSpan.textContent === '') {
+                    // Toggle visibility of content
+                    if (expandedContentDiv.classList.contains('hidden')) {
+                        expandedContentDiv.innerHTML = ethicalContent[principleTitle];
                         expandedContentDiv.classList.remove('hidden');
-                        contentTextSpan.textContent = '';
-                        spinner.classList.remove('hidden');
-                        event.target.disabled = true;
-
-                        const prompt = `Genera 3-4 consejos prácticos y accionables para la implementación del principio de uso responsable de la IA: "${principleTitle}" en el día a día de una empresa como Drivim (venta de vehículos). Enfócate en acciones concretas que un empleado pueda llevar a cabo.`;
-                        const generatedText = await callGeminiAPI(prompt);
-
-                        spinner.classList.add('hidden');
-                        contentTextSpan.textContent = generatedText;
-                        event.target.disabled = false;
                     } else {
                         expandedContentDiv.classList.add('hidden');
-                        contentTextSpan.textContent = '';
+                        expandedContentDiv.innerHTML = ''; // Clear content when collapsed
                     }
                 });
             });
@@ -1100,7 +1601,6 @@
                                     if (context.parsed.y !== null) {
                                         label += context.parsed.y + ' tokens';
                                     }
-                                    return label;
                                 }
                             }
                         }
@@ -1160,6 +1660,371 @@
                 aiAskResponseText.textContent = response;
                 askAiButton.disabled = false;
             });
+
+            // Quiz Logic
+            const quizQuestions = [
+                {
+                    question: "¿Cuál es el rol del usuario al interactuar con la IA, según la guía?",
+                    options: [
+                        "Un mero espectador que recibe respuestas.",
+                        "Un 'Director de Orquesta' que guía a la IA con claridad.",
+                        "Un programador que escribe código para la IA.",
+                        "Un validador final sin influencia en el proceso."
+                    ],
+                    correctAnswer: "Un 'Director de Orquesta' que guía a la IA con claridad."
+                },
+                {
+                    question: "¿Qué significa el principio 'Sé Claro y Específico' al crear un prompt?",
+                    options: [
+                        "Usar muchas palabras para asegurar que la IA entienda.",
+                        "Definir con exactitud el objetivo, audiencia, tono y formato de la respuesta.",
+                        "Hacer preguntas generales para que la IA sea creativa.",
+                        "Evitar cualquier tipo de detalle para no limitar a la IA."
+                    ],
+                    correctAnswer: "Definir con exactitud el objetivo, audiencia, tono y formato de la respuesta."
+                },
+                {
+                    question: "¿Por qué es crucial 'Contextualizar' al interactuar con la IA?",
+                    options: [
+                        "Para que la IA sepa dónde trabajas geográficamente.",
+                        "Porque la IA tiene memoria de todas tus conversaciones previas.",
+                        "Para que la IA tenga toda la información relevante sobre tu negocio o situación.",
+                        "Para hacer el prompt más largo y complejo."
+                    ],
+                    correctAnswer: "Para que la IA tenga toda la información relevante sobre tu negocio o situación."
+                },
+                {
+                    question: "¿Qué beneficio principal se obtiene al 'Asignar un Rol' a la IA?",
+                    options: [
+                        "La IA se vuelve más amigable.",
+                        "La IA adapta su vocabulario, estilo y enfoque a la perspectiva deseada.",
+                        "Reduce la cantidad de tokens utilizados.",
+                        "Permite a la IA tomar decisiones autónomas sin supervisión."
+                    ],
+                    correctAnswer: "La IA adapta su vocabulario, estilo y enfoque a la perspectiva deseada."
+                },
+                {
+                    question: "¿Cuál es la mejor estrategia para 'Dividir Tareas Complejas'?",
+                    options: [
+                        "Pedirle a la IA que haga todo de una vez para ahorrar tiempo.",
+                        "Dividir la tarea en pasos más pequeños y manejables, iterando en cada fase.",
+                        "Ignorar las tareas complejas y solo usar la IA para cosas sencillas.",
+                        "Dejar que la IA decida cómo dividir la tarea."
+                    ],
+                    correctAnswer: "Dividir la tarea en pasos más pequeños y manejables, iterando en cada fase."
+                },
+                {
+                    question: "¿Qué implica el principio 'Exige y Corrige'?",
+                    options: [
+                        "Aceptar la primera respuesta de la IA sin cuestionar.",
+                        "Pedir revisiones y mejoras específicas hasta que el resultado cumpla las expectativas.",
+                        "Culpar a la IA si el resultado no es perfecto.",
+                        "Usar la IA solo para tareas que no requieran corrección."
+                    ],
+                    correctAnswer: "Pedir revisiones y mejoras específicas hasta que el resultado cumpla las expectativas."
+                },
+                {
+                    question: "¿Qué son los 'Tokens' en el contexto de la IA y por qué es importante optimizarlos?",
+                    options: [
+                        "Monedas virtuales para comprar respuestas de la IA.",
+                        "Unidades básicas de texto que la IA procesa; optimizarlos mejora velocidad y eficiencia.",
+                        "Errores que la IA comete al generar texto.",
+                        "Sinónimos de 'prompts largos'."
+                    ],
+                    correctAnswer: "Unidades básicas de texto que la IA procesa; optimizarlos mejora velocidad y eficiencia."
+                },
+                {
+                    question: "¿Cuál es una de las consideraciones éticas más importantes al usar IA, según la guía?",
+                    options: [
+                        "Compartir todos los datos de clientes para mejorar la IA.",
+                        "Verificar siempre la información generada y proteger la privacidad.",
+                        "Dejar que la IA tome todas las decisiones importantes.",
+                        "Usar la IA para reemplazar la mayor cantidad de trabajos posible."
+                    ],
+                    correctAnswer: "Verificar siempre la información generada y proteger la privacidad."
+                },
+                {
+                    question: "¿Qué es una 'Alucinación' en el contexto de la IA?",
+                    options: [
+                        "Cuando la IA crea imágenes muy realistas.",
+                        "Cuando la IA genera información incorrecta, inventada o sin base real.",
+                        "Un término para describir la creatividad de la IA.",
+                        "Un estado de ánimo de la IA."
+                    ],
+                    correctAnswer: "Cuando la IA genera información incorrecta, inventada o sin base real."
+                },
+                {
+                    question: "¿Por qué es importante ser consciente de los 'Sesgos' en la IA?",
+                    options: [
+                        "Para que la IA no te dé respuestas subjetivas.",
+                        "Porque la IA siempre es imparcial y objetiva.",
+                        "Porque la IA puede reproducir o amplificar prejuicios de los datos de entrenamiento.",
+                        "Para que la IA solo genere contenido positivo."
+                    ],
+                    correctAnswer: "Porque la IA puede reproducir o amplificar prejuicios de los datos de entrenamiento."
+                },
+                {
+                    question: "¿Qué significa la 'Supervisión Humana' en el uso de la IA?",
+                    options: [
+                        "Que los humanos deben observar a la IA sin intervenir.",
+                        "Que la IA es un sustituto completo de la inteligencia humana.",
+                        "Que el juicio, la experiencia y la supervisión humana son esenciales para la calidad y adecuación.",
+                        "Que la IA solo debe usarse para tareas sin importancia."
+                    ],
+                    correctAnswer: "Que el juicio, la experiencia y la supervisión humana son esenciales para la calidad y adecuación."
+                },
+                {
+                    question: "¿Qué técnica avanzada implica pedir a la IA que muestre sus pasos intermedios de razonamiento?",
+                    options: [
+                        "Few-Shot Prompting.",
+                        "Deep Research.",
+                        "Token Optimization.",
+                        "Cadena de Pensamiento (Chain of Thought)."
+                    ],
+                    correctAnswer: "Cadena de Pensamiento (Chain of Thought)."
+                },
+                {
+                    question: "¿Qué técnica avanzada consiste en proporcionar a la IA unos pocos ejemplos de la tarea deseada?",
+                    options: [
+                        "Deep Research.",
+                        "Few-Shot Prompting.",
+                        "Automatización Inteligente.",
+                        "Prompt Engineering."
+                    ],
+                    correctAnswer: "Few-Shot Prompting."
+                },
+                // Nuevas preguntas generales
+                {
+                    question: "¿Qué es el 'Prompt Engineering' y cuál es su objetivo principal?",
+                    options: [
+                        "El arte de programar IA para crear aplicaciones complejas.",
+                        "La técnica de conversar eficazmente con la IA para obtener los mejores resultados.",
+                        "El proceso de entrenar modelos de IA con grandes volúmenes de datos.",
+                        "La automatización de tareas repetitivas mediante algoritmos."
+                    ],
+                    correctAnswer: "La técnica de conversar eficazmente con la IA para obtener los mejores resultados."
+                },
+                {
+                    question: "¿Cuál es la principal diferencia entre un 'Chatbot' y un 'Agente de IA'?",
+                    options: [
+                        "Un Chatbot solo responde, mientras que un Agente puede tomar decisiones y realizar acciones autónomas.",
+                        "Un Chatbot es más inteligente que un Agente de IA.",
+                        "Un Agente de IA solo se usa en marketing, y un Chatbot en ventas.",
+                        "No hay diferencia, son términos intercambiables."
+                    ],
+                    correctAnswer: "Un Chatbot solo responde, mientras que un Agente puede tomar decisiones y realizar acciones autónomas."
+                }
+            ];
+
+            let currentQuestionIndex = 0;
+            let score = 0;
+            let userAnswers = new Array(quizQuestions.length).fill(null); // To store user's selected option index
+
+            const quizContainer = document.getElementById('quiz-container');
+            const quizQuestion = document.getElementById('quiz-question');
+            const quizOptions = document.getElementById('quiz-options');
+            const questionCounter = document.getElementById('question-counter');
+            const quizFeedback = document.getElementById('quiz-feedback');
+            const prevQuestionBtn = document.getElementById('prev-question-btn');
+            const nextQuestionBtn = document.getElementById('next-question-btn');
+            const quizResults = document.getElementById('quiz-results');
+            const finalScoreSpan = document.getElementById('final-score');
+            const totalQuestionsSpan = document.getElementById('total-questions');
+            const restartQuizBtn = document.getElementById('restart-quiz-btn');
+            const quizDetailsSummary = document.getElementById('quiz-details-summary');
+
+
+            function loadQuestion() {
+                const q = quizQuestions[currentQuestionIndex];
+                questionCounter.textContent = `Pregunta ${currentQuestionIndex + 1} de ${quizQuestions.length}`;
+                quizQuestion.textContent = q.question;
+                quizOptions.innerHTML = '';
+                quizFeedback.classList.add('hidden'); // Hide feedback for new question
+
+                // Hide 'Anterior' button on the first question
+                prevQuestionBtn.classList.toggle('hidden', currentQuestionIndex === 0);
+
+                q.options.forEach((option, index) => {
+                    const label = document.createElement('label');
+                    label.className = 'quiz-option flex items-center p-3 rounded-md cursor-pointer transition-all duration-200 ease-in-out';
+                    label.innerHTML = `
+                        <input type="radio" name="quiz-option" value="${option}" data-index="${index}">
+                        <span class="custom-radio"></span>
+                        <span class="flex-grow">${option}</span>
+                    `;
+                    quizOptions.appendChild(label);
+
+                    // Restore selection and feedback if user has already answered this question
+                    if (userAnswers[currentQuestionIndex] !== null) {
+                        // Disable all options
+                        quizOptions.querySelectorAll('.quiz-option').forEach(opt => opt.classList.add('pointer-events-none'));
+
+                        const selectedOptionValue = quizQuestions[currentQuestionIndex].options[userAnswers[currentQuestionIndex]];
+                        const correctAnswerValue = quizQuestions[currentQuestionIndex].correctAnswer;
+
+                        if (option === selectedOptionValue) {
+                            label.querySelector('input[type="radio"]').checked = true;
+                            label.classList.add('selected'); // Mark as selected
+                            if (option === correctAnswerValue) {
+                                label.classList.add('correct');
+                                quizFeedback.textContent = '¡Correcto!';
+                                quizFeedback.className = 'quiz-feedback correct';
+                            } else {
+                                label.classList.add('incorrect');
+                                quizFeedback.textContent = 'Incorrecto. La respuesta correcta era: ' + correctAnswerValue;
+                                quizFeedback.className = 'quiz-feedback incorrect';
+                            }
+                        } else if (option === correctAnswerValue) {
+                            label.classList.add('correct'); // Highlight correct answer even if not selected
+                        }
+                        quizFeedback.classList.remove('hidden');
+                    } else {
+                        // Enable all options if not answered yet
+                        quizOptions.querySelectorAll('.quiz-option').forEach(opt => opt.classList.remove('pointer-events-none', 'correct', 'incorrect', 'selected'));
+                    }
+
+                    // Add click listener to the label for custom radio behavior
+                    label.addEventListener('click', () => {
+                        if (userAnswers[currentQuestionIndex] === null) { // Only allow selection if not already answered
+                            // Remove 'selected' from all options
+                            quizOptions.querySelectorAll('.quiz-option').forEach(opt => opt.classList.remove('selected'));
+                            // Add 'selected' to the clicked option
+                            label.classList.add('selected');
+                            label.querySelector('input[type="radio"]').checked = true; // Ensure radio is checked
+                            checkAnswer(option, index);
+                        }
+                    });
+                });
+
+                updateNavigationButtons();
+            }
+
+            function checkAnswer(selectedOption, selectedIndex) {
+                const correctAnswer = quizQuestions[currentQuestionIndex].correctAnswer;
+                const optionsElements = quizOptions.querySelectorAll('.quiz-option');
+                
+                // Store user's answer
+                userAnswers[currentQuestionIndex] = selectedIndex;
+
+                optionsElements.forEach(optionEl => {
+                    const optionValue = optionEl.querySelector('input').value;
+                    optionEl.classList.remove('correct', 'incorrect'); // Clear previous states
+                    optionEl.classList.add('pointer-events-none'); // Disable further clicks
+
+                    if (optionValue === correctAnswer) {
+                        optionEl.classList.add('correct');
+                    } else if (optionValue === selectedOption) {
+                        optionEl.classList.add('incorrect');
+                    }
+                });
+
+                if (selectedOption === correctAnswer) {
+                    quizFeedback.textContent = '¡Correcto!';
+                    quizFeedback.className = 'quiz-feedback correct';
+                } else {
+                    quizFeedback.textContent = 'Incorrecto. La respuesta correcta era: ' + correctAnswer;
+                    quizFeedback.className = 'quiz-feedback incorrect';
+                }
+                quizFeedback.classList.remove('hidden');
+                updateNavigationButtons(); // Update button state after answering
+            }
+
+            function updateNavigationButtons() {
+                // 'Anterior' button
+                prevQuestionBtn.disabled = currentQuestionIndex === 0;
+                prevQuestionBtn.classList.toggle('hidden', currentQuestionIndex === 0);
+
+                // 'Siguiente' / 'Evaluar' button
+                if (currentQuestionIndex === quizQuestions.length - 1) {
+                    nextQuestionBtn.textContent = 'Evaluar';
+                    nextQuestionBtn.disabled = userAnswers[currentQuestionIndex] === null; // Disable 'Evaluar' if last question not answered
+                } else {
+                    nextQuestionBtn.textContent = 'Siguiente';
+                    nextQuestionBtn.disabled = userAnswers[currentQuestionIndex] === null; // Disable 'Siguiente' if current question not answered
+                }
+            }
+
+            function getScoreColor(currentScore, totalQuestions) {
+                const percentage = (currentScore / totalQuestions) * 100;
+                let hue; // Hue for HSL color: 0 (red) to 120 (green)
+                if (percentage <= 50) {
+                    // Red to Yellow (0 to 60 hue)
+                    hue = percentage * 1.2; // 0% -> 0 hue, 50% -> 60 hue
+                } else {
+                    // Yellow to Green (60 to 120 hue)
+                    hue = 60 + ((percentage - 50) * 1.2); // 50% -> 60 hue, 100% -> 120 hue
+                }
+                // Use a slightly darker lightness for better visibility on white background
+                return `hsl(${hue}, 100%, 40%)`; 
+            }
+
+            function showResults() {
+                score = 0;
+                quizDetailsSummary.innerHTML = '<h4 class="font-bold text-xl text-[#422680] mb-3">Revisión de Respuestas:</h4>'; // Clear previous details
+
+                quizQuestions.forEach((q, i) => {
+                    const questionDetailDiv = document.createElement('div');
+                    questionDetailDiv.className = 'mb-4 p-3 rounded-md border';
+
+                    const isCorrect = (userAnswers[i] !== null && q.options[userAnswers[i]] === q.correctAnswer);
+                    if (isCorrect) {
+                        score++;
+                        questionDetailDiv.classList.add('border-green-400', 'bg-green-50');
+                    } else {
+                        questionDetailDiv.classList.add('border-red-400', 'bg-red-50');
+                    }
+
+                    questionDetailDiv.innerHTML = `
+                        <p class="quiz-detail-question">${i + 1}. ${q.question}</p>
+                        ${userAnswers[i] !== null ? 
+                            `<p class="quiz-detail-answer ${isCorrect ? 'correct-answer' : 'user-incorrect-answer'}">
+                                Tu respuesta: ${q.options[userAnswers[i]]} ${isCorrect ? '✅' : '❌'}
+                            </p>` :
+                            `<p class="quiz-detail-answer bg-gray-200">No respondida</p>`
+                        }
+                        ${!isCorrect ? 
+                            `<p class="quiz-detail-answer correct-answer">
+                                Respuesta correcta: ${q.correctAnswer}
+                            </p>` : ''
+                        }
+                    `;
+                    quizDetailsSummary.appendChild(questionDetailDiv);
+                });
+
+                quizContainer.classList.add('hidden');
+                quizResults.classList.remove('hidden');
+                finalScoreSpan.textContent = score;
+                totalQuestionsSpan.textContent = quizQuestions.length;
+                finalScoreSpan.style.color = getScoreColor(score, quizQuestions.length);
+            }
+
+            nextQuestionBtn.addEventListener('click', () => {
+                if (currentQuestionIndex === quizQuestions.length - 1 && userAnswers[currentQuestionIndex] !== null) {
+                    showResults();
+                } else if (userAnswers[currentQuestionIndex] !== null) { // Only allow next if current question is answered
+                    currentQuestionIndex++;
+                    loadQuestion();
+                }
+            });
+
+            prevQuestionBtn.addEventListener('click', () => {
+                if (currentQuestionIndex > 0) {
+                    currentQuestionIndex--;
+                    loadQuestion();
+                }
+            });
+
+            restartQuizBtn.addEventListener('click', () => {
+                currentQuestionIndex = 0;
+                score = 0;
+                userAnswers.fill(null); // Reset all answers
+                quizResults.classList.add('hidden');
+                quizContainer.classList.remove('hidden');
+                quizFeedback.classList.add('hidden'); // Hide feedback
+                loadQuestion();
+            });
+
+            loadQuestion(); // Initial load
         });
     </script>
 </body>
